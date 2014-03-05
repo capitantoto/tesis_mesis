@@ -75,6 +75,8 @@ end
 
 def normalizar_una(mesa)
   peso = mesa.reduce(:+)
+  peso = 1 unless peso != 0 # En caso de que se tomen 0 votos de una mesa, esta linea impide que se dividan los resultads por cero.
+
   norma = mesa.map {|votos| (votos.to_f / peso).round(4)}
   return norma
 end
@@ -193,7 +195,7 @@ def muestra_general(mesas, cantidad)
 
   muestra_general = sumar_arrays(muestras_por_mesa)
 
-  return muestra_general
+  return normalizar_una(muestra_general)
 end
 
 def agregar_votos(votos)
@@ -208,19 +210,12 @@ def pesar_muestra(muestra, peso)
   return normalizar_una(muestra).map {|votos| votos * peso}
 end
 
+def muestreo_repetido(agregado, tamano_muestra, repeticiones)
+  repeticiones.times do
+    p muestra_general(agregado, tamano_muestra)
+  end
+end
+
+muestreo_repetido(votos_mesas, 500, 20)
 
 ############################ Borrador - Pruebas ################################
-a =  normalizar_una(muestra_por_mesa(votos_secciones[13], 1000))
-p a
-p a.reduce(:+)
-
-b = muestra_general(votos_mesas, 50000)
-p b
-p b.reduce(:+)
-
-if probar
-10.times do
-t = muestra_general(votos_mesas, 5000)
-p (ecm(normalizar_una(t), normalizar_una(votos_por_partido))*10_000).round(2)
-end
-end
