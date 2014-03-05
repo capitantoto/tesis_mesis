@@ -100,10 +100,12 @@ def simular_limite(n, mesas, referencia)
       error = (ecm(mesa, referencia)*10_000).round(2)
 #      puts "Evaluando #{mesa}, paso #{i} el ECM es #{error}"
 #      gets
+      
       if error > 1
-        puts mesas.length - i + 1
+#        puts mesas.length - i + 1
         results << mesas.length - i + 1
         break
+      
       else
       end
     end
@@ -142,7 +144,7 @@ pesos_secciones = pesos(votos_secciones)
 
 # Dado el tamano de muestra deseado, calcular cuantos votos sacar de cada agregado.
 
-def crear_muestra_discreta(n, votos_agregado)
+def tamanos_muestra_discreta(votos_agregado, n)
   peso_total = pesos(votos_agregado).reduce(:+)
   votos_por_mesa = pesos(votos_agregado).map {|x| (x.to_f / peso_total * n).round(2)}
 #  p votos_por_mesa
@@ -158,14 +160,86 @@ def crear_muestra_discreta(n, votos_agregado)
   return votos_por_mesa_discretos
 end
 
+# Tomar 'cantidad' votos de la mesa 'mesa', al azar, sin repetir.
+
+def muestra_por_mesa(mesa, cantidad)
+  copia_mesa = mesa.dup
+  votos_elegidos = []
+  
+  while votos_elegidos.length < cantidad
+    n = copia_mesa.reduce(:+)
+    sorteo = rand(1..n)
+    voto_actual = 0
+    
+    while sorteo > copia_mesa.first(voto_actual+1).reduce(:+)
+      voto_actual +=1
+    end
+    
+    votos_elegidos << voto_actual
+    copia_mesa[voto_actual] -= 1
+  end
+  
+  return votos_elegidos
+end
+
+# Dado un conjunto de mesas (o circuitos, o secciones), y una cantidad de votos a muestrear de ellos, crear la muestra. Involucra primero una llamada a tamano_muestra_discreta() que devuelve los votos a tomar por mesa, y luego a muestra_por_mesa(), que toma los votos anteriormente indicados de cada mesa.
+
+def muestra_general(mesas, cantidad)
+  muestra_general = []
+  
+  votos_por_mesa = tamanos_muestra_discreta(mesas, cantidad)
+  
+  for i in 0..mesas.length-1
+    muestra_por_mesa(mesas[i], votos_por_mesa[i]).each do |voto|
+      muestra_general.push(voto)
+    end
+  end
+
+  return muestra_general
+end
 
 
+def sampleo_general(mesas)
+  sampleo = []
+  mesas.each_with_index do |mesa, i|
+    samp = samplear_por_mesa(mesa)
+    puts "La mesa #{i} sampleo #{samp}. Woohoo!"
+    sampleo << samp
+  end
+  puts
+  return sampleo
+end
 
 
+10.times do
+t = muestra_general(votos_mesas, 5000)
+b = Array.new(6, 0)
+t.each {|x| b[x]+=1}
+p (ecm(normalizar_una(b), normalizar_una(votos_por_partido))*10_000).round(2)
+end
+
+p '='*20
+
+
+10.times do
+t = muestra_general(votos_circuitos, 5000)
+b = Array.new(6, 0)
+t.each {|x| b[x]+=1}
+p (ecm(normalizar_una(b), normalizar_una(votos_por_partido))*10_000).round(2)
+end
+
+p '='*20
+
+10.times do
+t = muestra_general(votos_secciones, 5000)
+b = Array.new(6, 0)
+t.each {|x| b[x]+=1}
+p (ecm(normalizar_una(b), normalizar_una(votos_por_partido))*10_000).round(2)
+end
 =begin Para probar el algoritmo de muestreo
 b = []
 10000.times do
-  a = crear_muestra_discreta(500, votos_secciones)
+  a = tamanos_muestra_discreta(500, votos_secciones)
   b << a.reduce(:+)
 end
 
