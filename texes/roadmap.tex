@@ -1,0 +1,45 @@
+Para mi tesis quiero probar dos experimentos.
+
+1. Cuan variables son muestras aleatorias de votantes en funcion del tamano de la muestra, manteniendo la representatividad a distintos niveles: mesa, circuito, comuna (seccion).
+
+2. Cuan variables son lso resultados de la eleccion en funcion del orden en que se van cargando los telegramas.
+
+Como lo realmente importante en una eleccion es saber quien se lleva cuantas bancas y no el \% de votos que uno saque, los resultados se mediran en funcion de en cuantas bancas totales varian con respecto al resultado que efectivamente se observo. Para esto voy a necesitar una calculadora D'Hont.
+
+Para probar ambas hipotesis, trabajare unicamente con los datos de la eleccion de diputados de la capital federal. Los resultados deberian ser sencillamente reproducibles para senadores, y con ciertos retoques para otros distritos. Para trabajar con los datos de capital, necesito transformarlos a un formato accesible en ruby. Esto ya esta hecho.
+
+Para probar la hipotesis 2., necesito escribir un pedazo de codigo que:
+
+HECHO	a. Ordene al azar el array con los telegramas.
+HECHO	b. Transforme el array en otro donde cada elemento i es la suma de todos los elementos hasa i inclusive.
+HECHO	c. Normalice el array anterior para que cada uno de los elementos represente el procentaje correspondiente del total, entre 0 y 1.
+HECHO	d. Calcule el ECM / dif por D'Hont del array anterior con la realidad a cada paso.
+	e. Repetir el proceso anterior unas 10.000 veces y guardar los resultados.
+	f. Plotear los resultados obtenidos.
+
+Para probar la hipotesis 1, necesito escribir un pedazo de codigo que:
+
+	a. Elija a que nivel de agregado 'agr' se quiere probar la hipotesis: mesa 'm', circuito 'c' o seccion 's'
+	b. Elija que tama\~no de muestra 'n' se desea.
+	c. Calcule cuantos votos por 'agr' se deben tomar para obtener el tamano de muestra 'n'
+		i. Si se quiere obtener una muestra de 'n' votantes de un total de N, y cada agregado agr[i] tiene peso[i] votantes, habra que tomar n / N * peso[i] votos de cada agregado para la muestra general.
+		ii. Para respetar dicha composicion, cuando se requiera tomar una cantidad no entera de votos X.YYY, se tomaran siempre al menos X votos, e X+1 votos con probabilidad 0.YYY.
+	d. Tome dicha cantidad de votos sobre el agregado elegido, repetidas veces.
+	e. Repita los pasos b-f de la hipotesis 2, pero para los muestreos generados en la hip 1.
+
+Siendo las 16:30 del Martes 4/3, empiezo con la hipotesis 2.
+
+
+
+
+Agrupaciones políticas 	Votos 	Estimación de cargos
+PRO 	621.167 	34,46% 	5
+UNEN 	581.096 	32,23% 	5
+FPV 	389.128 	21,59% 	3
+FIT 	101.862 	5,65% 	
+AYL 	68.246 		3,79% 	
+CP 	41.194 		2,28% 	
+Afirm 	1.802.693 	93,21%
+Blanco 	111.983 	5,79%
+Nulos 	18.279 		0,95%
+Rec&Imp	1.051 		0,05%	

@@ -1,0 +1,21 @@
+Sobre los archivos de resultados Provisorios 2013
+
+Estos archivos ponen a disposicion los Resultados Provisorios de las elecciones del 27 de octubre de 2013 para los cargos de Diputados Nacionales, Senadores Nacionales, Diputados Provinciales y Senadores Provinciales.
+
+La fuente de datos de este Recuento Provisional son los Telegramas con los resultados del escrutinio realizado en cada mesa electoral que han sido suscritos por los presidentes de mesa juntamente con los fiscales (art. 105, Codigo Electoral Nacional).
+
+La informacion contenida en estos archivos muestra resultados para cada Distrito del pais, desagregados por Secciones, Circuitos y Mesas de votacion. La informacion provista corresponde al momento de cierre del Recuento Provisional e incluye todas las mesas para las cuales se recibieron telegramas con datos legibles que fueron cargados a la base del Recuento. 
+
+El Escrutinio Definitivo se realiza a partir de otras fuentes y es desarrollado por la Justicia Nacional Electoral, de acuerdo a los procedimientos establecidos en el Codigo Electoral Nacional. 
+
+Sobre el significado de algunas variables incluidas:
+9001: es la cantidad de electores
+9002: es la cantidad de sobres en la urna segun se informa en el telegrama
+9003: votos de identidad impugnada
+9004: votos en blanco para la categoria
+9005: votos nulos
+9006: votos recurridos
+
+Nota: existen departamentos en los cuáles solamente se eligieron una de las dos categorías provinciales (diputados provinciales o senadores provinciales), por lo que sólo tienen resultados para esa categoría.
+
+Nota: la carga de los resultados electorales para la elección de diputados provinciales de las provincias de Formosa y Santiago del Estero fue efectuada por cada provincia respectivamente, y por lo tanto no figura en este conjunto de datos aportado por la Dirección Nacional Electoral.
