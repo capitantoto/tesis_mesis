@@ -1,0 +1,118 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[spanish]{babel}
+%\usepackage{a4wide}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{makeidx}
+\usepackage{float}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{pdfpages}
+
+\usepackage{listings}\usepackage{color}
+\usepackage{textcomp}\definecolor{listinggray}{gray}{0.9}
+
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\usepackage{a4wide}
+
+\lstset{
+      language=C++,
+      basicstyle=\small\sffamily,
+      columns=fullflexible,
+      upquote=true,
+      extendedchars=true,
+      texcl=true,
+      mathescape=true,
+      showspaces=false
+                }
+            
+
+
+
+
+\begin{document}
+
+\title{Los l\'imites de la predictabildiad electoral.}
+\author{Gonzalo Barrera Borla}
+\date{\today}
+
+\maketitle
+
+\pagebreak
+
+\begin{abstract}
+MANDAR FRUTA LINDA 
+\end{abstract}
+
+\pagebreak
+
+
+\section{Nota al lector}
+Este ensayo \emph{analiza} un fen\'omeno recurrente en la elaboraci\'on de toda hip\'otesi estad\'istica, pero no \emph{utiliza} para ello el herramental tradicional del test de hip\'otesis - ni tiene por qu\'e hacerlo, de manera similar a la que para estudiar la fabricaci\'on de un auto no hace falta con \emph{crear} uno sino que basta con \emph{ver} crear varios.
+
+Como consecuencia, y para alegr\'ia del lector no acad\'emico, se ha reducido a un m\'inimo el uso de t\'erminos t\'ecnicos. En su lugar, recurriremos principalmente al uso de gr\'aficos, un medio de representaci\'on de la infomraci\'on mucho m\'as ameno e inmediatamente comprensible que los generalmente ins\'ipidos modelos y tecnicismos.
+
+Por lo tanto, el trabajo est\'a pensado para ser le\'ido con los gr\'aficos lado a lado con el cuerpo de texto, como una especie de presentaci\'on (de los gr\'aficos) narrada (por el texto).  
+
+\pagebreak
+
+\tableofcontents
+
+\pagebreak
+
+\index{Introducci\'on}
+\section{Introducci\'on}
+\subsection{El fen\'omeno}
+Supongamos que queremos estimar la distribucion del parametro $\phi$ en la poblacion $P$, con una precision $\alpha$. Para ellos, habremos de extraer una muestra de $P$ de tama\~no $n$. Paradojicamente, estimar qu\'e $n$ es suficientemente grande para garantizar una precisi\'on de $\alpha$, es necesario conocer la distribucion de $\phi$ en $P$.
+
+
+Romper este c\'irculo vicioso es imposible en la enorme mayor\'ia de los disen\~os experimentales, ya que el tamano muestral puede ser varios ordenes de magnitud menor que el temano de la poblacion. En consecuencia, conocer el tama\~no muestral utilizado en un estudio cientifico o una encuesta, no es por s\'i solo un buen indicador de la precisi\'on de los resultados. La \'unica forma de salir de esta trampa, es conociendo la poblaci\'on entera, cosa que - casi -nunca es posible.
+
+Los resultados electorales publicados por la Direccion Nacional Electoral en el portal de Datos Publicos del Gobierno de la Nacion, nos proveen de una feliz excepcion a la regla, ya que encuentran disponibles en formato digital los telegramas con las cantidades de votos registrados en cada una de las mesas de la Capital Federal (entre otros). Si $\phi$ representa ahora 'partido por el cual se vot\'o', y $P$ es la pobloci\'on de votantes, podemos estimar qu\'e precisi\'on nos garantiza un determinado $n$.
+
+\subsection{Estrategia de an\'alisis}
+En esta tesina, intentaremos un analisis de esta ultima pregunta: que confianza podemos tener en el estimador de $\phi$ derivado de una muestra de tama\~no $n$? Para ello se programaron en ruby dos simuladores, que intentar emular dos estimadores distintos de el resultado final de la eleccion: el resultado provisorio del escrutinio, y las encuestas pre-electorales.
+
+
+El "simulador de la noche del escrutinio" (SNE), primero aleatoriza el orden de carga de los telegramas de cada mesa al sistema, y luego computa la evoluci\'on del resultado provisorio porcentajes a medida que avanza el porcentaje de mesas escrutadas. Con \'el, podemos observar como la adici\'on de nueva informaci\o'on a un pronostico preexistente lo va mejorando, y a que ritmo lo hace.
+
+El "simulador de muestras aleatorias" (SMA), nos permite extraer muestras perfectamente aleatorias de tamano $n$ del total de la poblacion (respetando en los pesos el tamano de cada circuito y seccion electoral). Con el, podremos estudiar de manera directa \emph{de las muestras} del tamano deseado, algo que el investigador con una \'unica muestra se encuentra incapacitado.
+
+A partir de los datos generados por estos dos simuladores, se intentara dar una idea de la interaccion entre el tamano muestral y el error del estimador asociado, visualizando la informacion de distintas formas y extrayendo algunos - muy pocos - resultados numericos.
+
+Discutiremos luego las implicancias pr\'acticas de los resultados observados, y estableceremos los supuestos bajo los cuales \'estos se pueden generalizar a situaciones similares.
+
+
+\pagebreak
+
+\index{Desarrollo}
+%\input{desarrollo.tex}
+
+\pagebreak
+
+
+\index{Resultados}
+%\input{resultados.tex}
+
+\pagebreak
+
+
+\index{Discusi\'on}
+%\input{discusion.tex}
+
+\pagebreak
+
+%\input{conclusiones.tex}
+
+\pagebreak
+
+%\input{apendices.tex}
+
+\pagebreak
+
+%\input{referencias.tex}
+
+
+\end{document}

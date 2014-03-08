@@ -1,5 +1,5 @@
 all:
-	pdflatex roadmap.tex
-	pdflatex roadmap.tex
+	pdflatex tesis.tex
+	pdflatex tesis.tex
 clean:
-	rm -f *.aux *.toc *.out *.pdf
+	rm -f *.aux *.toc *.out *.pdf *.log
