@@ -10,6 +10,7 @@
 \usepackage{float}
 \usepackage[margin=1.0in]{geometry}
 \usepackage{pdfpages}
+\usepackage[table]{xcolor}
 
 \usepackage{listings}\usepackage{color}
 \usepackage{textcomp}\definecolor{listinggray}{gray}{0.9}
@@ -18,7 +19,7 @@
 \usepackage{a4wide}
 
 \lstset{
-      language=C++,
+      language=Ruby,
       basicstyle=\small\sffamily,
       columns=fullflexible,
       upquote=true,
@@ -48,8 +49,12 @@ MANDAR FRUTA LINDA
 
 \pagebreak
 
+\tableofcontents
+
+\pagebreak
 
 \section{Nota al lector}
+
 Este ensayo \emph{analiza} un fen\'omeno recurrente en la elaboraci\'on de toda hip\'otesi estad\'istica, pero no \emph{utiliza} para ello el herramental tradicional del test de hip\'otesis - ni tiene por qu\'e hacerlo, de manera similar a la que para estudiar la fabricaci\'on de un auto no hace falta con \emph{crear} uno sino que basta con \emph{ver} crear varios.
 
 Como consecuencia, y para alegr\'ia del lector no acad\'emico, se ha reducido a un m\'inimo el uso de t\'erminos t\'ecnicos. En su lugar, recurriremos principalmente al uso de gr\'aficos, un medio de representaci\'on de la infomraci\'on mucho m\'as ameno e inmediatamente comprensible que los generalmente ins\'ipidos modelos y tecnicismos.
@@ -58,13 +63,10 @@ Por lo tanto, el trabajo est\'a pensado para ser le\'ido con los gr\'aficos lado
 
 \pagebreak
 
-\tableofcontents
-
-\pagebreak
-
-\index{Introducci\'on}
 \section{Introducci\'on}
+
 \subsection{El fen\'omeno}
+
 Supongamos que queremos estimar la distribucion del parametro $\phi$ en la poblacion $P$, con una precision $\alpha$. Para ellos, habremos de extraer una muestra de $P$ de tama\~no $n$. Paradojicamente, estimar qu\'e $n$ es suficientemente grande para garantizar una precisi\'on de $\alpha$, es necesario conocer la distribucion de $\phi$ en $P$.
 
 
@@ -87,32 +89,129 @@ Discutiremos luego las implicancias pr\'acticas de los resultados observados, y 
 
 \pagebreak
 
-\index{Desarrollo}
-%\input{desarrollo.tex}
+\section{Dise\~no experimental}
 
-\pagebreak
+\subsection{Caracter\'isticas del dataset}
+
+La Direcci\'on Nacional Electoral, a trav\'es del portal de Datos P\'ublicos del Gobierno de la Naci\'on, nos provee de toda la informaci\'on imaginable sobre los m\'as recientes resultados electorales. Para realizar este trabajo, descargamos el archivo 'electoral-2013-diputados-nacionales.csv' que contiene las cantidades de votos registrados en todas las mesas del pa\'is para la elecci\'on de diputados nacionales. Estas son las primeras de las mas de 22 millones de l\'ineas del archivo:
+
+\begin{center}
+	\begin{tabular}{ llllll }
+codigo\_provincia & codigo\_departamento & codigo\_circuito & codigo\_mesa & codigo\_votos & votos \\ \hline
+1 & 1 & 1 & 1 & 9001 & 351 \\
+1 & 1 & 1 & 1 & 9002 & 0 \\
+1 & 1 & 1 & 1 & 9003 & 0 \\
+1 & 1 & 1 & 1 & 9004 & 0 \\
+1 & 1 & 1 & 1 & 9005 & 0 \\
+1 & 1 & 1 & 1 & 9006 & 0 \\
+1 & 1 & 1 & 1 & 187 & 8 \\
+1 & 1 & 1 & 1 & 501 & 64 \\
+1 & 1 & 1 & 1 & 502 & 58 \\
+1 & 1 & 1 & 1 & 503 & 78 \\
+1 & 1 & 1 & 1 & 505 & 26 \\
+1 & 1 & 1 & 1 & 506 & 7 \\ 
+	\end{tabular}
+\end{center}
+...
+
+Para acotar el universo de an\'alisis a una \'unica carrera electoral, tomamos solamente los datos de las mesas de Capital Federal, es decir, aquellas cuyo codigo\_provincia es '1'.
+
+codigo\_departamento, codigo\_circuito y codigo\_mesa, son los identificadores de una mesa electoral cualquiera, en ese orden de generalidad. Para Capital Federal, por ejemplo, los c\'odigos de departamento coinciden con los n\'umeros de Comuna (una mesa con codigo\_departamente = 14 estar\'a en la Comuna 14). A su vez, las comunas est\'an divididas en un total de 167 circuitos, en los cuales hay 7342 mesas.
+
+Por alguna raz\'on, s\'olo hay datos disponibles para 7263 de las 7342 mesas, lo que pareciera decir que unos 79 telegramas nunca llegaron al centro de c\'omputos electoral.
+
+Los c\'odigos de votos del 9001 al 9006 indican varios datos como la cantidad de electores inscriptos en la mesa, de votos en blanco, nulos y recurridos. Como el resultado final de la elecci\'on \emph{no} depende de ninguno de ellos (s\'olo nos concentramos en la cantidad de votos registrados para los restantes seis 'codigo\_votos'. Estos representan a cada uno de los seis partidos que participaron en la elecci\'on de diputados nacionales por la Capital Federal:
+
+\begin{center}
+	\begin{tabular}{ll}
+		codigo\_votos & partido \\ \hline
+			  187 & Autodeterminaci\'on y Libertad\\
+		   501 & Frente Para la Victoria \\
+		   502 & UNEN \\
+		   503 & Union PRO \\
+		   505 & Frente de Izquierda y de los Trabajadores \\
+		   506 & Camino Popular \\
+	\end{tabular}
+\end{center}
+ 
+\subsection{Transformaci\'on de los datos.}
+
+Para manipular m\'as f\'acilmente la informaci\'on, con la ayuda de un poco de c\'odigo en SQL (Ver Anexo II) se transform\'o la tabla en una equivalente, donde esta vez cada mesa est\'a representada por una \'unica l\'inea:
+
+\begin{center}
+	\begin{tabular}{l | llllll}
+mesa & AYL & FPV & UNEN & PRO & FIT & CP \\ \hline
+1 & 8 & 64 & 58 & 78 & 26 & 7 \\
+2 & 11 & 53 & 71 & 70 & 18 & 6 \\
+3 & 14 & 79 & 61 & 72 & 12 & 7 \\
+4 & 6 & 79 & 63 & 75 & 16 & 5 \\
+5 & 7 & 74 & 51 & 65 & 12 & 5 \\
+7 & 12 & 65 & 63 & 70 & 21 & 9 \\
+	\end{tabular}
+\end{center}
+
+En este punto fueron eliminadas del conjunto unas 7 mesas que indicaban un total de cero votos afirmativos, dejando finalmente 7256 mesas.
+
+Sumando los resultados por mesa a nivel seccion y circuito, se confeccionaron tablas con formato id\'entico a esta \'ultima, pero donde cada l\'inea representa la cantidad de votos por partido a nivel circuito y secciones, respectivamente.
+
+\subsection{Dise\~no de los simuladores}
+
+En esta secci\'oin explicaremos brevemente y sin tecnicismo los pasos que sigue nuestro programa para correr una simulaci\'on y obtener los resultados de ella. 
+Si se quiere conocer en detalle las "entra\~nas" de los simuladores, recomendamos consultar directamente el c\'odigo fuente, que se encuentra en su totalidad en el Anexo II. Para facilitar la lectura, se proveen comentarios detallados acerca de su funcionamiento.
+
+\subsubsection{Simulador de la noche del escrutinio}
+
+A las 18hs del d\'ia de la elecci\'on, las autoridades de mesa dan por terminado el comicio y comienzan a contar los votos. A medida que terminan dicha tarea, se le entrega al personal de Correo Argentino las urnas y un telegrama por mesa, donde se encuentra el resumen de lo ocurrido en ella, y cuyo contenido ya comentamos brevemente. Una vez que toda las mesas de una escuela fueron contabilizadas, los telegramas son enviados a un centro de c\'omputos, donde un pequen\~o ej\'ercito de tipeadores de datos digitaliza a mano los n\'umeros contenidos en cada telegrama.
+
+Los telegramas son cargados dos veces por tipeadores distintos (que no ven lo que carg\'o el otro), y si alguno de los campos ingresados no coincide, un tercero desempata.
+
+Tenemos entonces dos fuentes de aleatoriedad en el orden de escrutinio de los votos: primero, en funci\'on de qu\'e escuelas terminan m\'as r\'apido el conteo; segundo, en funci\'on de que en el centro de c\'omputos mismo la carga de datos es realizada simult\'aneamente por numerosas personas, y con doble chequeo.
+
+Nuestro supuesto simplificador entonces, ser\'a que en el fondo, el orden en el que los resultados de las 7256 mesas se contabilizan la noche del escrutinio, es perfectamente aleatorio. En la realidad, dicho orden es mayormente aleatorio por las razones que acabamos de mencionar, pero no \emph{completamente} aleatorio.
+
+En una simulaci\'on dada, entonces, nuestro programa ejecutar\'a los siguientes pasos:
+
+\begin{enumerate}
+	\item Ordenar al azar las 7256 mesas (simulando la carga de los telegramas al sistema).
+	\item Reemplazar los votos de la mesa en la en\'esima posici\'on, por la suma de los votos de las mesas hasta dicha posici\'on inclusive (simulando el conteo provisorio hasta el momento).
+	\item Transformar a cada paso las sumas parciales de votos que recibi\'o cada partido, en los porcentajes correspondientes.
+\end{enumerate}
+
+Cada simulaci\'on producir\'a, finalmente, una matriz de 6 X 7256, donde el elemento en la posici\'on (i,j) es el porcentaje de votos recibidos por el partido 'j' cuando se llevan contabilizadas 'i' mesas. La \'ultima fila de la matriz ser\'a id\'entica en todas las simulaciones (y coincidir\'a con el verdadero porcentaje de los votos que recibi\'o cada partido, uan vez escrutada la totalidad de las mesas.
+
+\subsubsection{Simulador de muestras aleatorias}
+
+Este simulador se puede pensar como una funci\'on que toma dos par\'ametros: un tama\~no muestral $n$ y un nivel de agregaci\'on geogr\'afica $g$, donde 
+
+\begin{itemize}
+	\item $n$ puede ser cualquier numero positivo entre 1 y ~1.800.000 (la cantidad de votos afirmativos); y
+	\item $g$ puede ser 'mesas', 'circuitos' o 'secciones'
+\end{itemize}
+
+Con esos par\'ametros determinados, el simulador determinar\'a cu\'antos votos tomar de cada $g$, para que el tama\~no esperado de la muestra sea $n$. Siendo $p_{i}$ la poblaci\'on del agregado $i$, $P$ la poblaci\'on total, la cantidad de votos $m_{i}$ a tomar de dicha seccion, circuito o mesa ser\'a:
+$$ m_{i} = \frac{p_{i}}{P} \times{} n $$
+	Si $m_{i}$ no resultase entero, se tomar\'an aleatoriamente el piso o techo de $m_{i}$ votos de manera que a la larga, en promedio, se est\'en tomando exactamente $m_{i}$ votos de dicho agregado.
+
+Por ejemplo, si hubiese s\'olo dos mesas con 34 y 66 votos cada una, y se especificara $n=10$, habr\'a que tomar 3,4 votos de la primer mesa, y 6,6 de la segunda. Para ello, de la primer mesa se tomar\'an 3 votos en el \%60 de los casos, y 4 votos el \% restante. De la segunda mesa, se tomaran 6 votos el 40\% de los casos, y 7 el \%40 restante.
 
 
-\index{Resultados}
-%\input{resultados.tex}
+Luego, se calculan los pesos asociados a cada elemento de dependiendo de qu\'e agregado vengan, como la raz\'on entre la cantidad total de votos en el agregado y la cantidad de votos del agregado en la muestra. En el ejemplo anterior, si tomamos 3 votos de la mesa de 34, cada voto contar\'a por $34/3 = 11,333...$ votos, pero si tomamos 4, cada uno contar\'a por $34/4 = 8,5$.
 
-\pagebreak
+Una vez hechos todos los c\'alculos, se extraen al azar de cada agregado la cantidad de votos previamente determinada, se los pondera por su peso asociado, y se construye la muestra final.
+
+Por el elemento aleatorio que utilizamos para volver entera la cantidad de votos tomados de cada agregado, el tama\~no final de la muestras puede no ser exactamente $n$ sino un poco mayor o menor. Sin embargo, esto es irrelevante, pues al calcular los pesos de cada observaci\'on en la muestra, el peso final de cada agregado es exactamente proporcional al tama\~no de su poblaci\'on.
+
+El producto de una simulaci\'on dada entonces, ser\'a un vector de 6 componentes, que son las cantidades de votos que cada partido hubiese obtenido en la elecci\'on si la poblaci\'on entera votase exactamente igual que la muestra elegida.
 
 
-\index{Discusi\'on}
-%\input{discusion.tex}
 
-\pagebreak
 
-%\input{conclusiones.tex}
 
-\pagebreak
-
-%\input{apendices.tex}
-
-\pagebreak
-
-%\input{referencias.tex}
+\section{Referencias}
+electoral-2013-diputados-nacionales.csv
+txt con la descripcion del dataset
+Manual para autoridades de mesa de la DINE
+experiencia personal y comentarios de funcionarios de la DINE sobre funcionamiento del conteo de votos
 
 
 \end{document}
