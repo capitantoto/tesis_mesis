@@ -1,5 +1,0 @@
-\select@language {spanish}
-\contentsline {section}{\numberline {1}Nota al lector}{3}{section.1}
-\contentsline {section}{\numberline {2}Introducci\'on}{5}{section.2}
-\contentsline {subsection}{\numberline {2.1}El fen\'omeno}{5}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}Estrategia de an\'alisis}{5}{subsection.2.2}
