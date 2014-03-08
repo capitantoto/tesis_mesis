@@ -3,3 +3,6 @@
 *.tsv
 *.pdf
 *.log
+# Graphics and data
+*.dat
+*.png

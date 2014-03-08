@@ -114,6 +114,7 @@ def simular_limite(n, mesas, referencia)
   return results
 end
 
+
 if probar
   a = simular_limite(100, votos_mesas, normalizar_una(votos_por_partido))
   a.sort!
@@ -211,11 +212,45 @@ def pesar_muestra(muestra, peso)
 end
 
 def muestreo_repetido(agregado, tamano_muestra, repeticiones)
+  muestras = []
   repeticiones.times do
-    p muestra_general(agregado, tamano_muestra)
+    muestras << muestra_general(agregado, tamano_muestra)
   end
+  return muestras
 end
 
-muestreo_repetido(votos_mesas, 500, 20)
+# muestreo_repetido(votos_mesas, 500, 20)
 
 ############################ Borrador - Pruebas ################################
+
+=begin
+# Codigo para generar el escrutinio de ejemplo
+normalizar_muchas(suma_parcial(mezclar_mesas(votos_mesas))).each_with_index do |x, i|
+  print "#{i + 1}"
+  x.each { |y| print " \& #{'%.2f' % (y*100)}"}
+  puts
+end
+=end
+
+# muestreo_repetido(votos_circuitos, 10, 2)
+
+muestreo_repetido(votos_circuitos, 10, 5).each do |x|
+  print "#{10}"
+  x.each {|y| print " \& #{'%.2f' % (y*100)}"}
+  puts
+end
+muestreo_repetido(votos_circuitos, 100, 5).each do |x|
+  print "#{100}"
+  x.each {|y| print " \& #{'%.2f' % (y*100)}"}
+  puts
+end
+muestreo_repetido(votos_circuitos, 1000, 5).each do |x|
+  print "#{1000}"
+  x.each {|y| print " \& #{'%.2f' % (y*100)}"}
+  puts
+end
+muestreo_repetido(votos_circuitos, 10000, 5).each do |x|
+  print "#{10000}"
+  x.each {|y| print " \& #{'%.2f' % (y*100)}"}
+  puts
+end
