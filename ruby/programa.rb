@@ -227,7 +227,7 @@ end
 # Simulaciones escrutinio
 escrutinios = []
 i = 1
-10_000.times do
+1_000.times do
   escrutinios << simular_un_escrutinio(votos_mesas)
     p i
     i +=1

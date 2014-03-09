@@ -1,5 +1,5 @@
 set terminal pngcairo size 1600,1200
-set output 'errorpercs.png'
+set output '5_percentiles_errabs_segun_n_muestral.png'
 set logscale xy
 
 percs = "1 5 10 50 90 95 99"
