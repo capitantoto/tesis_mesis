@@ -1,0 +1,23 @@
+\section{Anexo II: C\'odigo fuente.}
+
+No se incluye aqui el codigo para transformar la informaci\'on del formato original a la versi\'on utilizada por los simuladores, con cada mesa, circuito o seccion representada por un unico vector de 6 componentes. Si se desea, dicho codigo (escrito en SQL) se puede revisar en repositorio de GitHub de este trabajo:
+
+www.github.com/gonzalobb/tesis_mesis 
+
+Para cada funcion, se provee una breve descripcion de lo que realiza, y que elementos devuelve.
+
+  mi_funcion(arg1, arg2) => resultado
+
+... quiere decir que la funcion 'mi_funcion' toma los argumentos 'arg1' y arg2', y devuelve 'resultado'.
+
+Tanto los argumentos como los resutlados de las funciones son de tres grandes tipos:
+
+\begin{center}
+  \begin{itemize}
+  \item Numeros enteros, representados con letras minusculas. El tamano muestral a considerar, la cantidad de muestras uqe se desea extraer, el numero de mesas a escrutar.
+\item Vectores (o \textit{arrays}), representados con []. Son casi siempre un dexteto de numeros representando alguna caracteristica relacionada a los partidos participantes: pueden estar expresados en votos absolutos, proporciones entre cero y 1, y porcentajes (entre 0 y 100)
+
+\item "Matrices" (o \textit{arrays bidimensionales}, representadas con [[]]. Tecnicamente son arrays que tienen un array en cada una de sus posiciones. Como un vector es un conjunto de numeros, una matriz es un conjunto de vectores. Una simulacion de la noche dle escutinio, por ejemplo, consistira en uan matriz donde la fila $i$ contiene los resutlados parciales, habiendose escrutado $i$ mesas. Un conjunto de 1000 muestras aleatorias de tamano X, estara representado por 1000 vectores de 6 elementos, o una matriz de $ 1000 \times 6 $.
+\end{itemize}
+\end{center}
+

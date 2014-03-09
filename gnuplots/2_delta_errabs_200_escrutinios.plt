@@ -1,5 +1,5 @@
 set terminal pngcairo size 3200,1600
-set output '3_delta_errabs_100_escrutinios.png'
+set output '2_delta_errabs_200_escrutinios.png'
 set logscale x
 set yrange[-10:10]
 set xrange[1.01:1000]

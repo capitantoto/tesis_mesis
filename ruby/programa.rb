@@ -1,17 +1,16 @@
-
 #########################################
 #                                       #
 #       PROCESAMIENTO DE DATOS          #
 #                                       #
 #########################################
 
-# Guardo cada linea del input en el array 'mesas_raw'
-
+# Tomo los datos a cada nivel de agregacion, y los cargo en sendos [[]]
 mesas_raw     = IO.readlines(Dir.pwd + "/mesas_raw.tsv")
 circuitos_raw = IO.readlines(Dir.pwd + "/circuitos_raw.tsv")
 secciones_raw   = IO.readlines(Dir.pwd + "/secciones_raw.tsv")
 
-
+# emprolijar_agregado([[]]) => ([[]])
+# --Toma el input 'crudo' generado con SQL y devuelve los votos agregados a nivel mesa, circuito o seccion en el formato 'vector de 6 elementos' que utilizan los simuladores.
 def emprolijar_agregado(agregado)
   
   # Elimino la primer linea del archivo, que contiene los titulos de las columnas:
@@ -34,34 +33,63 @@ def emprolijar_agregado(agregado)
   return agregado_prolijo
 end
 
+# Guarda el resultados de 'emprolijar' mesas, circuito y secciones en sendas [[]].
 votos_mesas     = emprolijar_agregado(mesas_raw)
 votos_circuitos = emprolijar_agregado(circuitos_raw)
 votos_secciones = emprolijar_agregado(secciones_raw)
 
+
 #########################
 #                       #
-#      HIPOTESIS II     #
+#  Funciones Generales  #
 #                       #
 #########################
 
-# Variables auxiliares.
+# ecm([], []) => n
+# --Suma los cuadrados de las diferencias entre los elementos de dos vectores. Ej: ecm([1,2], [4,3]) => 10
+def ecm(a, b)
+  dif = [a, b].transpose.map {|x| x.reduce(:-)}
+  dif.map! {|x| x**2}
+  return dif.reduce(:+)
+end
 
-mesas_test = []
-votos_mesas.first(5).each {|x| mesas_test << x}
+# errabs([], []) => n
+# --Suma las diferencias absolutas entre los elementos de dos vectores. Ej: ecm([1,2], [4,3]) => 4
+def errabs(a, b)
+  dif = [a,b].transpose.map {|x| x.reduce(:-).abs}
+  return dif.reduce(:+)*100
+end
 
-resultado_4dec = [0.379, 0.2162, 0.3221, 0.3446, 0.0564, 0.0228]
-votos_por_partido = [68_246, 389_128, 581_096, 621_167, 101_862, 41_194]
-votos_afirmativos = 1_802_693
+# normalizar_una([]) => []
+# --Toma los votos por partido obtenidos en una mesa/circuito/seccion ("m/c/s"), y devuelve que proporcion del total representan. Ej: normalizar_una([2,3,5]) => [0.2,0.3,0.5]
+def normalizar_una(mesa)
+  peso = mesa.reduce(:+)
+  peso = 1 unless peso != 0 # En caso de que se tomen 0 votos de una mesa, esta linea impide que se dividan los resultads por cero.
+  norma = mesa.map {|votos| (votos.to_f / peso).round(10)}
+  return norma
+end
 
+############################
+#                          #
+# Simulador de Escrutinios #
+#                          #
+############################
+
+# mezclar_mesas([[]]) => [[]]
+# -- Toma la matriz de resutlados por mesa, y reordena las filas al azar. Ej: mezclar_mesas([[1,2],[3,4],[5,6],[7,8]]) => [[3,4],[7,8],[5,6],[1,2]]
 def mezclar_mesas(mesas)
   mesas_mezcladas = mesas.shuffle
   return mesas_mezcladas
 end
 
+# sumar_arrays([[]]) => []
+# --Toma un conjunto de vectores, y realiza su suma escalar. Ej: sumar_arrays([1,2],[7,4],[2,8]) = [10,14]
 def sumar_arrays(arrays)
   arrays.transpose.map {|x| x.reduce(:+)}
 end
 
+# suma_parcial([[]]) => [[]]
+# --Toma un conjunto de vectores, y devuelve para cada vector la suma escalar de todos los vectores desde el primero hasta el inclusive. Ej: suma_parcial([1,2],[7,4],[2,8]) = [[1,2],[8,6],[10,14]]   
 def suma_parcial(mesas)
   sumas_parciales = []
   sumas_parciales[0] = mesas[0]
@@ -71,16 +99,8 @@ def suma_parcial(mesas)
   return sumas_parciales
 end
 
-def normalizar_una(mesa)
-  peso = mesa.reduce(:+)
-  peso = 1 unless peso != 0 # En caso de que se tomen 0 votos de una mesa, esta linea impide que se dividan los resultads por cero.
-
-  norma = mesa.map {|votos| (votos.to_f / peso).round(10)}
-  return norma
-end
-
-resultado_exacto = normalizar_una(votos_por_partido)
-
+# normalizar_muchas([[]]) => [[]]
+# --Aplica la funcion normalizar_una([]) => [] a cada uno de los elementos de un conjunto de vectores.
 def normalizar_muchas(mesas)
   normas = []
   mesas.each do |mesa|
@@ -89,51 +109,20 @@ def normalizar_muchas(mesas)
   return normas
 end
 
-def ecm(a, b)
-  dif = [a, b].transpose.map {|x| x.reduce(:-)}
-  dif.map! {|x| x**2}
-  return dif.reduce(:+)
-end
-  
-def errabs(a, b)
-  dif = [a,b].transpose.map {|x| x.reduce(:-).abs}
-  return dif.reduce(:+)*100
-end
-
+# simular_un_escrutinio([[]]) => [[]]
+# --Combinando las funciones anterior, corre una simulacion entera de la evolucion de los resutlados la noche del escrutinio. Primero mezcla las mesas, luego hace las sumas parciales hasta cada mesa, y finalmente normaliza los resultados. El ultimo vector de la matriz coincide necesariamente ocn el resultado oficial de la eleccion, siempre.
 def simular_un_escrutinio(mesas)
   normalizar_muchas(suma_parcial(mezclar_mesas(mesas)))
 end
 
-curfile = File.open("simuescru.dat", "w")
-curfile.write(simular_un_escrutinio(votos_mesas))
-curfile.close
-
-def simular_limite(n, mesas, referencia)
-  results = []
-  n.times do
-    serie = normalizar_muchas(suma_parcial(mezclar_mesas(mesas))).reverse!
-    serie.each_with_index do |mesa, i|
-      error = (ecm(mesa, referencia)*10_000).round(2)
-      
-      if error > 1
-        results << mesas.length - i + 1
-        break
-      
-      else
-      end
-    end
-  end
-  return results
-end
-
-
-
 #########################
 #                       #
-#      HIPOTESIS I      #
+# Simulador de Muestras #
 #                       #
 #########################
 
+# pesos([[]]) => []
+# Toma una matriz, y devuelve un vector donde el i-esimo elemento corresponde a la suma de los componentes del i-esimo vector de la matriz original. Ej: pesos([1,2],[7,4],[2,8]) = [3,11,10]
 def pesos(mesas)
   pesos_mesas = []
   mesas.each do |mesa|
@@ -141,10 +130,6 @@ def pesos(mesas)
   end
   return pesos_mesas
 end
-
-pesos_mesas = pesos(votos_mesas)
-pesos_circuitos = pesos(votos_circuitos)
-pesos_secciones = pesos(votos_secciones)
 
 # Dado el tamano de muestra deseado, calcular cuantos votos sacar de cada agregado.
 
@@ -222,18 +207,22 @@ def muestreo_repetido(agregado, tamano_muestra, repeticiones)
   return muestras
 end
 
-
 ############################  Datos Oficiales  #################################
+
+# Variables auxiliares.
+resultado_4dec = [0.379, 0.2162, 0.3221, 0.3446, 0.0564, 0.0228]
+votos_por_partido = [68_246, 389_128, 581_096, 621_167, 101_862, 41_194]
+resultado_exacto = normalizar_una(votos_por_partido)
+
 # Simulaciones escrutinio
 escrutinios = []
 i = 1
 1_000.times do
   escrutinios << simular_un_escrutinio(votos_mesas)
-    p i
-    i +=1
+  i +=1
 end
-
 puts "escrutinios"
+
 # 1. Maximos y minimos obtenidos por Carrio y Bergman contadas N mesas.
 # maximos(simulaciones,  candidato)
 #
@@ -241,6 +230,7 @@ puts "escrutinios"
 # Traspongo el array y obtengo uno donde en cda posicion, estan los s porcentajes que el candidato obtuvo hasta la mesa i.
 # Tomo el maximo o minimo del array en cada posicion.
 # Devuebo un array de n posiciones, cada una con el max/min porcentaje obtenido por el candidato hasta entonces
+puts "1"
 
 def tomar_valores_candidato(mesas, candidato)
   valores_candidato = []
@@ -249,8 +239,6 @@ def tomar_valores_candidato(mesas, candidato)
   end
   return valores_candidato
 end
-
-
 
 def limites(simulaciones, candidato, tomar_max = true)
   valores_candidato = []
@@ -292,9 +280,8 @@ limites(escrutinios, 3, false).each_with_index do |x, i|
 end
 curfile.close
 
-puts "1 done"
-
 # 2. Plotear 100 deltaerrorsim(sim) en una misma figura
+puts "2"
 
 def errabs_escrutinio(escrutinio)
   errabs = []
@@ -321,11 +308,8 @@ escrutinios.first(500).each_with_index do |escrutinio, index|
   curfile.close
 end
 
-puts "2 done"
-
 # 3. Histogramas estalizacion errabs escrutinios
-
-
+puts "3"
 
 def estabilizacion_errabs(escrutinios)
   resultados = []
@@ -360,11 +344,8 @@ puntos_criticos_por_nivel.each_with_index do |puntos, i|
   curfile.close
 end
 
-puts "3 done"
-
 # 4. Histogramas de error de 100k muestras tamano 100, 500, 2000, 10000
-
-# muestreo_repetido(agregado, tamano_muestra, repeticiones)
+puts "4"
 
 quinientos = []
 10000.times do
@@ -410,14 +391,13 @@ cien.each_with_index do |errabs, i|
 end
 curfile.close
 
+# 5. Percentiles comparados
+puts "5"
+
 enes_grafico_cinco = []
 for i in 0..20
   enes_grafico_cinco << (10**(1 + 4.0 / 20 * i)).to_i
 end
-
-puts "4 done"
-
-# 5. Percentiles comparados
 
 muestras_grafico_cinco = []
 
@@ -438,46 +418,3 @@ for perc in percentiles do
   end
   curfile.close
 end
-
-puts "5 done"
-########################### Borrador - Pruebas ################################
-=begin
-normalizar_muchas(suma_parcial(mezclar_mesas(votos_mesas)).first(50)).each_with_index do |x, i|
-  print "#{i + 1}"
-  x.each { |y| print " #{'%.2f' % (y*100)}"}
-  puts
-end
- =end
-
-=begin
-# Codigo para generar el escrutinio de ejemplo
-normalizar_muchas(suma_parcial(mezclar_mesas(votos_mesas))).each_with_index do |x, i|
-  print "#{i + 1}"
-  x.each { |y| print " \& #{'%.2f' % (y*100)}"}
-  puts
-end
-=end
-
-=begin
-# codigo para generar muestras de ejemplo
-muestreo_repetido(votos_circuitos, 10, 5).each do |x|
-  print "#{10}"
-  x.each {|y| print " \& #{'%.2f' % (y*100)}"}
-  puts
-end
-muestreo_repetido(votos_circuitos, 100, 5).each do |x|
-  print "#{100}"
-  x.each {|y| print " \& #{'%.2f' % (y*100)}"}
-  puts
-end
-muestreo_repetido(votos_circuitos, 1000, 5).each do |x|
-  print "#{1000}"
-  x.each {|y| print " \& #{'%.2f' % (y*100)}"}
-  puts
-end
-muestreo_repetido(votos_circuitos, 10000, 5).each do |x|
-  print "#{10000}"
-  x.each {|y| print " \& #{'%.2f' % (y*100)}"}
-  puts
-end
-=end
