@@ -4,7 +4,6 @@
 #       PROCESAMIENTO DE DATOS          #
 #                                       #
 #########################################
-probar = false
 
 # Guardo cada linea del input en el array 'mesas_raw'
 
@@ -50,10 +49,9 @@ votos_secciones = emprolijar_agregado(secciones_raw)
 mesas_test = []
 votos_mesas.first(5).each {|x| mesas_test << x}
 
-# resultados = [0.379, 0.2162, 0.3221, 0.3446, 0.0564, 0.0228]
+resultado_4dec = [0.379, 0.2162, 0.3221, 0.3446, 0.0564, 0.0228]
 votos_por_partido = [68_246, 389_128, 581_096, 621_167, 101_862, 41_194]
 votos_afirmativos = 1_802_693
-
 
 def mezclar_mesas(mesas)
   mesas_mezcladas = mesas.shuffle
@@ -77,9 +75,11 @@ def normalizar_una(mesa)
   peso = mesa.reduce(:+)
   peso = 1 unless peso != 0 # En caso de que se tomen 0 votos de una mesa, esta linea impide que se dividan los resultads por cero.
 
-  norma = mesa.map {|votos| (votos.to_f / peso).round(4)}
+  norma = mesa.map {|votos| (votos.to_f / peso).round(10)}
   return norma
 end
+
+resultado_exacto = normalizar_una(votos_por_partido)
 
 def normalizar_muchas(mesas)
   normas = []
@@ -95,6 +95,18 @@ def ecm(a, b)
   return dif.reduce(:+)
 end
   
+def errabs(a, b)
+  dif = [a,b].transpose.map {|x| x.reduce(:-).abs}
+  return dif.reduce(:+)*100
+end
+
+def simular_un_escrutinio(mesas)
+  normalizar_muchas(suma_parcial(mezclar_mesas(mesas)))
+end
+
+curfile = File.open("simuescru.dat", "w")
+curfile.write(simular_un_escrutinio(votos_mesas))
+curfile.close
 
 def simular_limite(n, mesas, referencia)
   results = []
@@ -114,16 +126,6 @@ def simular_limite(n, mesas, referencia)
   return results
 end
 
-
-if probar
-  a = simular_limite(100, votos_mesas, normalizar_una(votos_por_partido))
-  a.sort!
-
-  a.each_with_index do |x, i|
-    puts "percentil #{i+1}: #{x}"
-  end
-  else
-end
 
 
 #########################
@@ -213,15 +215,239 @@ end
 
 def muestreo_repetido(agregado, tamano_muestra, repeticiones)
   muestras = []
-  repeticiones.times do
+  repeticiones.times do |i|
     muestras << muestra_general(agregado, tamano_muestra)
+    p "#{i}, #{tamano_muestra}"
   end
   return muestras
 end
 
-# muestreo_repetido(votos_mesas, 500, 20)
 
-############################ Borrador - Pruebas ################################
+############################  Datos Oficiales  #################################
+# Simulaciones escrutinio
+escrutinios = []
+i = 1
+10_000.times do
+  escrutinios << simular_un_escrutinio(votos_mesas)
+    p i
+    i +=1
+end
+
+puts "escrutinios"
+# 1. Maximos y minimos obtenidos por Carrio y Bergman contadas N mesas.
+# maximos(simulaciones,  candidato)
+#
+# Del array de s simulaciones, tomo unicamente los porcentajes conrrespondientes a 'candidato' y desecho el resto. Obtengo un array de s * n (n = numero de agregados)
+# Traspongo el array y obtengo uno donde en cda posicion, estan los s porcentajes que el candidato obtuvo hasta la mesa i.
+# Tomo el maximo o minimo del array en cada posicion.
+# Devuebo un array de n posiciones, cada una con el max/min porcentaje obtenido por el candidato hasta entonces
+
+def tomar_valores_candidato(mesas, candidato)
+  valores_candidato = []
+  mesas.each do |mesa|
+    valores_candidato << mesa[candidato]
+  end
+  return valores_candidato
+end
+
+
+
+def limites(simulaciones, candidato, tomar_max = true)
+  valores_candidato = []
+  simulaciones.each do |sim|
+    valores_candidato << tomar_valores_candidato(sim, candidato)
+  end
+  limites = []
+  valores_candidato.transpose.each_with_index do |porcs, i|
+    if tomar_max
+      limites << porcs.sort.pop()
+    else
+      limites << porcs.sort.shift()
+    end
+  end
+  return limites
+end  
+
+curfile = File.open("max_carrio.dat", "w")
+limites(escrutinios, 2, true).each_with_index do |x, i| 
+  curfile.puts "#{i + 1} #{x}"
+end
+curfile.close
+
+curfile = File.open("min_carrio.dat", "w")
+limites(escrutinios, 2, false).each_with_index do |x, i| 
+  curfile.puts "#{i + 1} #{x}"
+end
+curfile.close
+
+curfile = File.open("max_bergman.dat", "w")
+limites(escrutinios, 3, true).each_with_index do |x, i| 
+  curfile.puts "#{i + 1} #{x}"
+end
+curfile.close
+
+curfile = File.open("min_bergman.dat", "w")
+limites(escrutinios, 3, false).each_with_index do |x, i| 
+  curfile.puts "#{i + 1} #{x}"
+end
+curfile.close
+
+puts "1 done"
+
+# 2. Plotear 100 deltaerrorsim(sim) en una misma figura
+
+def errabs_escrutinio(escrutinio)
+  errabs = []
+  for i in 0..escrutinio.length-1
+    errabs[i] = errabs(escrutinio[i], escrutinio[-1])
+  end
+  return errabs
+end
+
+def delta_serie(serie)
+  delta_serie = []
+  for i in 0..(serie.length-1)
+    delta_serie << serie[i]-serie[i-1]
+  end
+  return delta_serie
+end
+
+escrutinios.first(500).each_with_index do |escrutinio, index|
+  curfile = File.open("escrutinio#{index}.dat", "w")
+  deltas = delta_serie(errabs_escrutinio(escrutinio))
+  deltas.each_with_index do |delta, i|
+    curfile.puts "#{i + 1} #{delta}"
+  end
+  curfile.close
+end
+
+puts "2 done"
+
+# 3. Histogramas estalizacion errabs escrutinios
+
+
+
+def estabilizacion_errabs(escrutinios)
+  resultados = []
+  escrutinios.each do |escrutinio|
+    deltas_invertidos = delta_serie(errabs_escrutinio(escrutinio)).reverse!
+    puntos_criticos = []
+    deltas_invertidos.each_with_index do |paso, i|
+      if paso > 0.01 && puntos_criticos.length == 0
+        puntos_criticos << escrutinio.length - i
+      elsif paso > 0.1 && puntos_criticos.length == 1
+        puntos_criticos << escrutinio.length - i
+      elsif paso > 1 && puntos_criticos.length == 2
+        puntos_criticos << escrutinio.length - i
+      elsif paso > 10 && puntos_criticos.length == 3
+        puntos_criticos << escrutinio.length - i
+        break
+      else
+      end
+    end
+    puntos_criticos.push(0) if puntos_criticos.length == 3
+    resultados << puntos_criticos
+  end
+  return resultados
+end
+
+puntos_criticos_por_nivel = estabilizacion_errabs(escrutinios).transpose.map {|x| x.sort!}
+puntos_criticos_por_nivel.each_with_index do |puntos, i|
+  curfile = File.open("quiebres#{i}.dat", "w")
+  puntos.each_with_index do |p, i|
+    curfile.puts "#{i + 1} #{p}"
+  end
+  curfile.close
+end
+
+puts "3 done"
+
+# 4. Histogramas de error de 100k muestras tamano 100, 500, 2000, 10000
+
+# muestreo_repetido(agregado, tamano_muestra, repeticiones)
+
+quinientos = []
+10000.times do
+  quinientos << errabs(muestra_general(votos_circuitos, 500), resultado_exacto)
+end
+quinientos.sort!
+curfile = File.open("quinientos.dat", "w")
+quinientos.each_with_index do |errabs, i|
+  curfile.puts "#{i + 1} #{errabs}"
+end
+curfile.close
+
+dosmil = []
+10000.times do
+  dosmil << errabs(muestra_general(votos_circuitos, 2000), resultado_exacto)
+end
+dosmil.sort!
+curfile = File.open("dosmil.dat", "w")
+dosmil.each_with_index do |errabs, i|
+  curfile.puts "#{i + 1} #{errabs}"
+end
+curfile.close
+
+diezmil = []
+10000.times do
+  diezmil << errabs(muestra_general(votos_circuitos, 10000), resultado_exacto)
+end
+diezmil.sort!
+curfile = File.open("diezmil.dat", "w")
+diezmil.each_with_index do |errabs, i|
+  curfile.puts "#{i + 1} #{errabs}"
+end
+curfile.close
+
+cien = []
+10000.times do
+  cien << errabs(muestra_general(votos_circuitos, 100), resultado_exacto)
+end
+cien.sort!
+curfile = File.open("cien.dat", "w")
+cien.each_with_index do |errabs, i|
+  curfile.puts "#{i + 1} #{errabs}"
+end
+curfile.close
+
+enes_grafico_cinco = []
+for i in 0..20
+  enes_grafico_cinco << (10**(1 + 4.0 / 20 * i)).to_i
+end
+
+puts "4 done"
+
+# 5. Percentiles comparados
+
+muestras_grafico_cinco = []
+
+enes_grafico_cinco.each do |ene|
+  muestras_ene = []
+  10000.times do
+    muestras_ene << errabs(muestra_general(votos_circuitos, ene), resultado_exacto)
+  end
+  muestras_ene.sort!
+  muestras_grafico_cinco << muestras_ene
+end
+
+percentiles =  [1, 5, 10, 50, 90, 95, 99]
+for perc in percentiles do
+  curfile = File.open("perc#{perc}.dat", "w")
+  muestras_grafico_cinco.each_with_index do |muestras, i|
+    curfile.puts "#{enes_grafico_cinco[i]} #{muestras[perc*100]}"
+  end
+  curfile.close
+end
+
+puts "5 done"
+########################### Borrador - Pruebas ################################
+=begin
+normalizar_muchas(suma_parcial(mezclar_mesas(votos_mesas)).first(50)).each_with_index do |x, i|
+  print "#{i + 1}"
+  x.each { |y| print " #{'%.2f' % (y*100)}"}
+  puts
+end
+ =end
 
 =begin
 # Codigo para generar el escrutinio de ejemplo
@@ -232,8 +458,8 @@ normalizar_muchas(suma_parcial(mezclar_mesas(votos_mesas))).each_with_index do |
 end
 =end
 
-# muestreo_repetido(votos_circuitos, 10, 2)
-
+=begin
+# codigo para generar muestras de ejemplo
 muestreo_repetido(votos_circuitos, 10, 5).each do |x|
   print "#{10}"
   x.each {|y| print " \& #{'%.2f' % (y*100)}"}
@@ -254,3 +480,4 @@ muestreo_repetido(votos_circuitos, 10000, 5).each do |x|
   x.each {|y| print " \& #{'%.2f' % (y*100)}"}
   puts
 end
+=end
