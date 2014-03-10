@@ -5,7 +5,7 @@ set title "Grafico III: Cantidad de mesas en las que se estabiliza la variacion 
 set xrange[0.1:7256]
 set logscale x
 set xlabel 'Mesas Escrutadas'
-set ylabel 'Frecuencia Relativa Acumulada'
+set ylabel 'Cantidad de simulaciones''
 
 
 set style line 100 lt 0 lc rgb "black" lw 5
