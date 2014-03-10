@@ -7,7 +7,7 @@ set xrange[1.01:1000]
 
 set logscale x
 set xrange [1:7256]
-set xlabel 'Mesas Escrutadas'
+set xlabel 'Log(mesas escrutadas)'
 set ylabel 'Variacion del error absoluto'
 
 
