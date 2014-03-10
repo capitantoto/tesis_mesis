@@ -18,3 +18,4 @@ mysql -uroot -pxagax911 tesis -e 'SELECT circuito, sum(ayl), sum(fpv), sum(unen)
 
 mysql -uroot -pxagax911 tesis -e 'SELECT seccion, sum(ayl), sum(fpv), sum(unen), sum(pro), sum(fit), sum(cp), sum(blancos) FROM mesas_dip GROUP BY seccion' > secciones_raw.tsv
 
+https://www.youtube.com/watch?v=yW1sXTgKJIg -- Randazzo mencionando los resultados.

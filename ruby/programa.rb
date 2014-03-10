@@ -45,9 +45,9 @@ votos_secciones = emprolijar_agregado(secciones_raw)
 #                       #
 #########################
 
-# ecm([], []) => n
+# errcuad([], []) => n
 # --Suma los cuadrados de las diferencias entre los elementos de dos vectores. Ej: ecm([1,2], [4,3]) => 10
-def ecm(a, b)
+def errcuad(a, b)
   dif = [a, b].transpose.map {|x| x.reduce(:-)}
   dif.map! {|x| x**2}
   return dif.reduce(:+)
@@ -122,7 +122,7 @@ end
 #########################
 
 # pesos([[]]) => []
-# Toma una matriz, y devuelve un vector donde el i-esimo elemento corresponde a la suma de los componentes del i-esimo vector de la matriz original. Ej: pesos([1,2],[7,4],[2,8]) = [3,11,10]
+# --Toma una matriz, y devuelve un vector donde el i-esimo elemento corresponde a la suma de los componentes del i-esimo vector de la matriz original. Ej: pesos([1,2],[7,4],[2,8]) = [3,11,10]
 def pesos(mesas)
   pesos_mesas = []
   mesas.each do |mesa|
@@ -131,8 +131,8 @@ def pesos(mesas)
   return pesos_mesas
 end
 
-# Dado el tamano de muestra deseado, calcular cuantos votos sacar de cada agregado.
-
+# tamanos_muestra_discreta([[]], n) => []
+# --Dado un nivel de agregados m/c/s y un tamano de muestra n a extrar, calcula cuantos elementos tomar de cada m/c/s para mantener la representatividad de la muestra general. En caso de encontrar cantidades no enteras, las "fracciones de voto" se distribuyen aleatoriamente.
 def tamanos_muestra_discreta(votos_agregado, n)
   
   peso_total = pesos(votos_agregado).reduce(:+)
@@ -148,8 +148,25 @@ def tamanos_muestra_discreta(votos_agregado, n)
   return votos_por_mesa_discretos
 end
 
-# Tomar 'cantidad' votos de la mesa 'mesa', al azar, sin repetir.
+# agregar_votos([]) => []
+# --Toma un conjunto de votos, y cuenta los totales para cada candidato, estando los candidatos representados por los numeros del 0 al 5.
+# --Ej: agregar_votos([1,2,3,1,1,0,5,3]) = [1,3,1,3,0,1]
+def agregar_votos(votos)
+  votos_agregados = Array.new(6, 0)
+  votos.each do |voto|
+    votos_agregados[voto] += 1
+  end
+  return votos_agregados
+end
 
+# pesar_muestra([], n) => []
+# --Toma una muestra de votos correspondiente a cierta m/c/s, y la pondera por el numero de votantes en ella. Ej: pesar_muestra([1,3,2], 300) = [50,150,100]
+def pesar_muestra(muestra, peso)
+  return normalizar_una(muestra).map {|votos| votos * peso}
+end
+
+# muestra_por_mesa([], n) => []
+# --Dada una m/c/s y un tamano muestral n, extrae de la m/c/s una muestra de n votos al azar.
 def muestra_por_mesa(mesa, cantidad)
   copia_mesa = mesa.dup
   votos_elegidos = []
@@ -170,8 +187,8 @@ def muestra_por_mesa(mesa, cantidad)
   return pesar_muestra(agregar_votos(votos_elegidos), peso_mesa)
 end
 
-# Dado un conjunto de mesas (o circuitos, o secciones), y una cantidad de votos a muestrear de ellos, crear la muestra. Involucra primero una llamada a tamano_muestra_discreta() que devuelve los votos a tomar por mesa, y luego a muestra_por_mesa(), que toma los votos anteriormente indicados de cada mesa.
-
+# muestral_general([[]], n) => []
+# Dado un conjunto de m/c/s y un tamano muestral, crear una muestra con dichas caracteristicas. Involucra primero una llamada a tamano_muestra_discreta() que devuelve los votos a tomar por m/c/s, y luego a muestra_por_mesa(), que toma los votos anteriormente indicados de cada m/c/s.
 def muestra_general(mesas, cantidad)
   muestras_por_mesa = []
   
@@ -186,50 +203,30 @@ def muestra_general(mesas, cantidad)
   return normalizar_una(muestra_general)
 end
 
-def agregar_votos(votos)
-  votos_agregados = Array.new(6, 0)
-  votos.each do |voto|
-    votos_agregados[voto] += 1
-  end
-  return votos_agregados
-end
-
-def pesar_muestra(muestra, peso)
-  return normalizar_una(muestra).map {|votos| votos * peso}
-end
-
-def muestreo_repetido(agregado, tamano_muestra, repeticiones)
-  muestras = []
-  repeticiones.times do |i|
-    muestras << muestra_general(agregado, tamano_muestra)
-    p "#{i}, #{tamano_muestra}"
-  end
-  return muestras
-end
-
-############################  Datos Oficiales  #################################
-
+#############################  
+#                           #
+#    Extraccion de Datos    #
+#                           #
+#############################
 # Variables auxiliares.
 resultado_4dec = [0.379, 0.2162, 0.3221, 0.3446, 0.0564, 0.0228]
 votos_por_partido = [68_246, 389_128, 581_096, 621_167, 101_862, 41_194]
 resultado_exacto = normalizar_una(votos_por_partido)
-
-# Simulaciones escrutinio
+=begin
+# Creacion de 1000 simulaciones de la noche del escrutinio.
 escrutinios = []
 i = 1
 1_000.times do
   escrutinios << simular_un_escrutinio(votos_mesas)
+  p i
   i +=1
 end
-puts "escrutinios"
 
-# 1. Maximos y minimos obtenidos por Carrio y Bergman contadas N mesas.
-# maximos(simulaciones,  candidato)
-#
+# 1. Conos de incertidumbre para Carrio y Bergman
 # Del array de s simulaciones, tomo unicamente los porcentajes conrrespondientes a 'candidato' y desecho el resto. Obtengo un array de s * n (n = numero de agregados)
 # Traspongo el array y obtengo uno donde en cda posicion, estan los s porcentajes que el candidato obtuvo hasta la mesa i.
-# Tomo el maximo o minimo del array en cada posicion.
-# Devuebo un array de n posiciones, cada una con el max/min porcentaje obtenido por el candidato hasta entonces
+# Tomo el percentil indicado del array en cada posicion.
+# Devuebo un array de n posiciones, cada una con el valor que acumula el percentil indicado por el candidato hasta entonces.
 puts "1"
 
 def tomar_valores_candidato(mesas, candidato)
@@ -240,47 +237,31 @@ def tomar_valores_candidato(mesas, candidato)
   return valores_candidato
 end
 
-def limites(simulaciones, candidato, tomar_max = true)
+def limites(simulaciones, candidato, posicion)
   valores_candidato = []
   simulaciones.each do |sim|
     valores_candidato << tomar_valores_candidato(sim, candidato)
   end
-  limites = []
-  valores_candidato.transpose.each_with_index do |porcs, i|
-    if tomar_max
-      limites << porcs.sort.pop()
-    else
-      limites << porcs.sort.shift()
-    end
+  porcentajes_parciales = valores_candidato.transpose
+  porcentajes_parciales.map {|n| n.sort!}
+  resultado = []
+  porcentajes_parciales.each do |percs|
+    resultado << percs[posicion]
   end
-  return limites
+  return resultado
 end  
 
-curfile = File.open("max_carrio.dat", "w")
-limites(escrutinios, 2, true).each_with_index do |x, i| 
-  curfile.puts "#{i + 1} #{x}"
+for candidato in (2..3)
+  for percentil in [1, 10, 50, 100, 500, 900, 950, 990, 1000]
+    curfile = File.open("#{candidato}_#{percentil}.dat", "w")
+    limites(escrutinios, candidato, percentil-1).each_with_index do |x, i| 
+      curfile.puts "#{i + 1} #{x}"
+    end
+    curfile.close
+  end
 end
-curfile.close
 
-curfile = File.open("min_carrio.dat", "w")
-limites(escrutinios, 2, false).each_with_index do |x, i| 
-  curfile.puts "#{i + 1} #{x}"
-end
-curfile.close
-
-curfile = File.open("max_bergman.dat", "w")
-limites(escrutinios, 3, true).each_with_index do |x, i| 
-  curfile.puts "#{i + 1} #{x}"
-end
-curfile.close
-
-curfile = File.open("min_bergman.dat", "w")
-limites(escrutinios, 3, false).each_with_index do |x, i| 
-  curfile.puts "#{i + 1} #{x}"
-end
-curfile.close
-
-# 2. Plotear 100 deltaerrorsim(sim) en una misma figura
+# 2. Variacion del error absoluto de 200 escrutinios en funcion del numero de mesas computadas.
 puts "2"
 
 def errabs_escrutinio(escrutinio)
@@ -299,7 +280,7 @@ def delta_serie(serie)
   return delta_serie
 end
 
-escrutinios.first(500).each_with_index do |escrutinio, index|
+escrutinios.first(200).each_with_index do |escrutinio, index|
   curfile = File.open("escrutinio#{index}.dat", "w")
   deltas = delta_serie(errabs_escrutinio(escrutinio))
   deltas.each_with_index do |delta, i|
@@ -308,7 +289,7 @@ escrutinios.first(500).each_with_index do |escrutinio, index|
   curfile.close
 end
 
-# 3. Histogramas estalizacion errabs escrutinios
+# 3. Frecuencias acumuldas de los valores para los cuales la estabilidad del error absoluto aumenta en un orden de magnitud. En otras palabras, se busca cual es la mesa 'n' a partirde la cual el errror absoluto se estabiliza por debajo de 10/1/0,1/0,01 puntos.
 puts "3"
 
 def estabilizacion_errabs(escrutinios)
@@ -343,55 +324,24 @@ puntos_criticos_por_nivel.each_with_index do |puntos, i|
   end
   curfile.close
 end
-
-# 4. Histogramas de error de 100k muestras tamano 100, 500, 2000, 10000
+=end
+# 4. Error absoluto de 10.000 muestras, para tamanos muestrales de 100, 500, 2000 y 10000.
 puts "4"
 
-quinientos = []
-10000.times do
-  quinientos << errabs(muestra_general(votos_circuitos, 500), resultado_exacto)
+for tamano in [100, 500, 2_000, 10_000]
+  curfile = File.open("graf4_#{tamano}.dat", "w")
+  errores_muestras = []
+  10_000.times do
+    errores_muestras  << errabs(muestra_general(votos_circuitos, tamano), resultado_exacto)
+  end
+  errores_muestras.sort!
+  errores_muestras.each_with_index do |errabs, i|
+    curfile.puts "#{i + 1} #{errabs}"
+  end
+  curfile.close
 end
-quinientos.sort!
-curfile = File.open("quinientos.dat", "w")
-quinientos.each_with_index do |errabs, i|
-  curfile.puts "#{i + 1} #{errabs}"
-end
-curfile.close
 
-dosmil = []
-10000.times do
-  dosmil << errabs(muestra_general(votos_circuitos, 2000), resultado_exacto)
-end
-dosmil.sort!
-curfile = File.open("dosmil.dat", "w")
-dosmil.each_with_index do |errabs, i|
-  curfile.puts "#{i + 1} #{errabs}"
-end
-curfile.close
-
-diezmil = []
-10000.times do
-  diezmil << errabs(muestra_general(votos_circuitos, 10000), resultado_exacto)
-end
-diezmil.sort!
-curfile = File.open("diezmil.dat", "w")
-diezmil.each_with_index do |errabs, i|
-  curfile.puts "#{i + 1} #{errabs}"
-end
-curfile.close
-
-cien = []
-10000.times do
-  cien << errabs(muestra_general(votos_circuitos, 100), resultado_exacto)
-end
-cien.sort!
-curfile = File.open("cien.dat", "w")
-cien.each_with_index do |errabs, i|
-  curfile.puts "#{i + 1} #{errabs}"
-end
-curfile.close
-
-# 5. Percentiles comparados
+# 5. Percentiles comparados para varios tamanos meustrales
 puts "5"
 
 enes_grafico_cinco = []
@@ -403,7 +353,7 @@ muestras_grafico_cinco = []
 
 enes_grafico_cinco.each do |ene|
   muestras_ene = []
-  10000.times do
+  10_000.times do
     muestras_ene << errabs(muestra_general(votos_circuitos, ene), resultado_exacto)
   end
   muestras_ene.sort!

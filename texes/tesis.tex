@@ -46,9 +46,8 @@
 \pagebreak
 
 \begin{abstract}
-MANDAR FRUTA LINDA 
-
-plot 
+	A partir del estudio de los resultados de las elecciones legislativas de Octubre 2013, pretendemos dar una idea emp\'irica de los considerables m\'argenes de error inherentes en cualquier predicci\'on electoral. Dado que se cuenta con datos para el total de la poblaci\'on, las tradicionales y complejas ecuaciones para estimar el error de \emph{una} muestra son reemplazadas por simulaciones que lo computan para \emph{decenas de miles} de muestra aleatorias.
+	El estudio del error en muestras generadas de manera perfectamente aleatoria, sirve no s\'olo para entender el problema en abstracto, sino como cota superior para el nivel de precisi\'on que pueden alcanzar muestreos realizados en la vida real. Discutiremos por lo tanto las condiciones bajo las cuales los resutlados expuestos se sostienen, y las implicancias pr\'acticas de estos.
 \end{abstract}
 
 \pagebreak
@@ -59,11 +58,11 @@ plot
 
 \section{Nota al lector}
 
-Este ensayo \emph{analiza} un fen\'omeno recurrente en la elaboraci\'on de toda hip\'otesi estad\'istica, pero no \emph{utiliza} para ello el herramental tradicional del test de hip\'otesis - ni tiene por qu\'e hacerlo, de manera similar a la que para estudiar la fabricaci\'on de un auto no hace falta con \emph{crear} uno sino que basta con \emph{ver} crear varios.
+Este ensayo \emph{analiza} analiza el margen de error inherente en la elaboraci\'on de toda hip\'otesi estad\'istica, pero no \emph{utiliza} para ello el herramental tradicional del test de hip\'otesis - ni tiene por qu\'e hacerlo, de manera similar a la que para estudiar la fabricaci\'on de un autom\'ovil no hace falta \emph{ensamblar} uno, sino que basta con \emph{observar} el ensamblado de varios.
 
-Como consecuencia, y para alegr\'ia del lector no acad\'emico, se ha reducido a un m\'inimo el uso de t\'erminos t\'ecnicos. En su lugar, recurriremos principalmente al uso de gr\'aficos, un medio de representaci\'on de la infomraci\'on mucho m\'as ameno e inmediatamente comprensible que los generalmente ins\'ipidos modelos y tecnicismos.
+Como consecuencia, y para alegr\'ia del - probablemente inexistente - lector no acad\'emico, se ha reducido a un m\'inimo el uso de t\'erminos t\'ecnicos. En su lugar, recurriremos principalmente al uso de gr\'aficos, que como medio de transmisi\'on de infomraci\'on suelen ser mucho m\'as amenos e inmediatamente comprensibles que modelos y tecnicismos ins\'ipidos.
 
-Por lo tanto, el trabajo est\'a pensado para ser le\'ido con los gr\'aficos lado a lado con el cuerpo de texto, como una especie de presentaci\'on (de los gr\'aficos) narrada (por el texto).  
+Por lo tanto, se recomienda tener los gr\'aficos lado a lado con el cuerpo de texto, como si esto fuese una presentaci\'on narrada. !`Int\'entelo!
 
 \pagebreak
 
@@ -71,22 +70,21 @@ Por lo tanto, el trabajo est\'a pensado para ser le\'ido con los gr\'aficos lado
 
 \subsection{El fen\'omeno}
 
-Supongamos que queremos estimar la distribucion del parametro $\phi$ en la poblacion $P$, con una precision $\alpha$. Para ellos, habremos de extraer una muestra de $P$ de tama\~no $n$. Paradojicamente, estimar qu\'e $n$ es suficientemente grande para garantizar una precisi\'on de $\alpha$, es necesario conocer la distribucion de $\phi$ en $P$.
+Supongamos que queremos estimar la distribuci\'on del par\'ametro $\phi$ en la poblacion $P$, con precisi\'on $\alpha$. Para ello, habremos de extraer una muestra de $P$ de tama\~no $n$. Parad\'ojicamente, para estimar qu\'e $n$ es lo suficientemente grande como para garantizar precisi\'on $\alpha$, es necesario conocer la distribucion de $\phi$ en $P$ - !`exactamente lo que prentend\'iamos estimar en primer lugar!.
 
+Romper este c\'irculo vicioso es sencillamente imposible en la enorme mayor\'ia de los experimentos tradicionales, ya que $n$ puede ser varios ordenes de magnitud menor que la $P$: de hecho, no poder analizar una poblaci\'on entera es el principal motivo para analizar muestras (o subconjuntos) de ella. En consecuencia, el $n$ utilizado en un estudio cientifico o una encuesta por s\'i solo \emph{no} es un buen indicador de la precisi\'on de los resultados. La \'unica forma segura de escapar de la trampa, es analizando la poblaci\'on entera, cosa que - casi -nunca es posible.
 
-Romper este c\'irculo vicioso es imposible en la enorme mayor\'ia de los disen\~os experimentales, ya que el tamano muestral puede ser varios ordenes de magnitud menor que el temano de la poblacion. En consecuencia, conocer el tama\~no muestral utilizado en un estudio cientifico o una encuesta, no es por s\'i solo un buen indicador de la precisi\'on de los resultados. La \'unica forma de salir de esta trampa, es conociendo la poblaci\'on entera, cosa que - casi -nunca es posible.
-
-Los resultados electorales publicados por la Direccion Nacional Electoral en el portal de Datos Publicos del Gobierno de la Nacion, nos proveen de una feliz excepcion a la regla, ya que encuentran disponibles en formato digital los telegramas con las cantidades de votos registrados en cada una de las mesas de la Capital Federal (entre otros). Si $\phi$ representa ahora 'partido por el cual se vot\'o', y $P$ es la pobloci\'on de votantes, podemos estimar qu\'e precisi\'on nos garantiza un determinado $n$.
+Los resultados electorales publicados por la Direcci\'on Nacional Electoral en el portal de Datos P\'ublicos del Gobierno de la Naci\'on, nos proveen de una bienvenida excepci\'on a la regla. Se encuentran disponibles digitalmente las cantidades de votos registrados en cada una de las mesas de la Capital Federal, entre otros. Si $P$ es ahora la pobloci\'on de votantes, y $\phi$ representa el partido por el cual se vot\'o, podemos estimar qu\'e precisi\'on en la estimaci\'on de $\phi$ nos garantiza un determinado $n$.
 
 \subsection{Estrategia de an\'alisis}
-En esta tesina, intentaremos un analisis de esta ultima pregunta: que confianza podemos tener en el estimador de $\phi$ derivado de una muestra de tama\~no $n$? Para ello se programaron en ruby dos simuladores, que intentar emular dos estimadores distintos de el resultado final de la eleccion: el resultado provisorio del escrutinio, y las encuestas pre-electorales.
+?`Qu\'e confianza podemos tener en el estimador de $\phi$ derivado de una muestra de tama\~no $n$? Obviamente, conocer c\'omo vot\'o la poblaci\'on completa facilita este an\'alisis, pero bajo ning\'un oncepto lo trivializa. Computar el error de estimaci\'on \emph{para toda muestra posible} de $n$ votantes se vuelve r\'apidamente una tarea herc\'ulea: Con m\'as de 1.800.000 votos emitidos, la cantidad de muestras con un mero $n=10$ son $9.83 \times 10^{55}$.
 
+Imposibilitados de calcular \emph{todas} las posibles muestras, s\'i podemos sin embargo simular enormes cantidades de ellas. Para hacerlo, se programaron en Ruby dos simuladores, que intentar emular las condiciones de los  dos estimadores m\'as comunes del resultado final de la eleccion: el conteo provisorio, y las encuestas pre-electorales.
 
-El "simulador de la noche del escrutinio" (SNE), primero aleatoriza el orden de carga de los telegramas de cada mesa al sistema, y luego computa la evoluci\'on del resultado provisorio porcentajes a medida que avanza el porcentaje de mesas escrutadas. Con \'el, podemos observar como la adici\'on de nueva informaci\o'on a un pronostico preexistente lo va mejorando, y a que ritmo lo hace.
+El "simulador de la noche del escrutinio" (SNE), primero aleatoriza el orden de recuento de los telegramas de cada mesa, y luego computa la evoluci\'on del resultado provisorio a medida que avanza el porcentaje de mesas escrutadas. Con \'el, podemos observar como la adici\'on de nueva informaci\o'on a un pron\'ostico preexistente lo va mejorando, y a qu\'e ritmo.
+El "simulador de muestras aleatorias" (SMA), nos permite extraer de la poblaci\'on total, muestras perfectamente aleatorias de tama\~no $n$, respetando en los pesos el tama\~no de cada circuito y secci\'on electoral). Con \'el, podremos estudiar de manera directa la \emph{poblaci\'on de muestras} del tama\~no deseado, algo que el investigador con una \'unica muestra se encuentra incapacitado.
 
-El "simulador de muestras aleatorias" (SMA), nos permite extraer muestras perfectamente aleatorias de tamano $n$ del total de la poblacion (respetando en los pesos el tamano de cada circuito y seccion electoral). Con el, podremos estudiar de manera directa \emph{de las muestras} del tamano deseado, algo que el investigador con una \'unica muestra se encuentra incapacitado.
-
-A partir de los datos generados por estos dos simuladores, se intentara dar una idea de la interaccion entre el tamano muestral y el error del estimador asociado, visualizando la informacion de distintas formas y extrayendo algunos - muy pocos - resultados numericos.
+A partir de los datos generados por estos dos simuladores, se intentar\'a dar una idea de la interaccion entre el tamano muestral y el error del estimador asociado, visualizando la informacion de distintas formas y extrayendo algunos - muy pocos - resultados num\'ericos.
 
 Discutiremos luego las implicancias pr\'acticas de los resultados observados, y estableceremos los supuestos bajo los cuales \'estos se pueden generalizar a situaciones similares.
 
@@ -97,7 +95,7 @@ Discutiremos luego las implicancias pr\'acticas de los resultados observados, y 
 
 \subsection{Caracter\'isticas del dataset}
 
-La Direcci\'on Nacional Electoral, a trav\'es del portal de Datos P\'ublicos del Gobierno de la Naci\'on, nos provee de toda la informaci\'on imaginable sobre los m\'as recientes resultados electorales. Para realizar este trabajo, descargamos el archivo 'electoral-2013-diputados-nacionales.csv' que contiene las cantidades de votos registrados en todas las mesas del pa\'is para la elecci\'on de diputados nacionales. Estas son las primeras de las mas de 22 millones de l\'ineas del archivo:
+La Direcci\'on Nacional Electoral, a trav\'es del Portal de Datos P\'ublicos del Gobierno de la Naci\'on, nos provee de toda la informaci\'on imaginable sobre los m\'as recientes resultados electorales. Para realizar este trabajo, descargamos el archivo 'electoral-2013-diputados-nacionales.csv' que contiene las cantidades de votos registrados en todas las mesas del pa\'is para la elecci\'on de diputados nacionales. Estas son las primeras de las mas de 22 millones de l\'ineas del archivo:
 
 \begin{center}
 	\begin{tabular}{ llllll }
@@ -120,11 +118,11 @@ codigo\_provincia & codigo\_departamento & codigo\_circuito & codigo\_mesa & cod
 
 Para acotar el universo de an\'alisis a una \'unica carrera electoral, tomamos solamente los datos de las mesas de Capital Federal, es decir, aquellas cuyo codigo\_provincia es '1'.
 
-codigo\_departamento, codigo\_circuito y codigo\_mesa, son los identificadores de una mesa electoral cualquiera, en ese orden de generalidad. Para Capital Federal, por ejemplo, los c\'odigos de departamento coinciden con los n\'umeros de Comuna (una mesa con codigo\_departamente = 14 estar\'a en la Comuna 14). A su vez, las comunas est\'an divididas en un total de 167 circuitos, en los cuales hay 7342 mesas.
+codigo\_departamento, codigo\_circuito y codigo\_mesa, en orden de especificidad creciente, son los identificadores de toda mesa. Para Capital Federal, por ejemplo, los c\'odigos de departamento coinciden con los n\'umeros de Comuna (una mesa con codigo\_departamente = 14 estar\'a en la Comuna 14). A su vez, las comunas est\'an divididas en un total de 167 circuitos, en los cuales hay 7342 mesas.
 
 Por alguna raz\'on, s\'olo hay datos disponibles para 7263 de las 7342 mesas, lo que pareciera decir que unos 79 telegramas nunca llegaron al centro de c\'omputos electoral.
 
-Los c\'odigos de votos del 9001 al 9006 indican varios datos como la cantidad de electores inscriptos en la mesa, de votos en blanco, nulos y recurridos. Como el resultado final de la elecci\'on \emph{no} depende de ninguno de ellos (s\'olo nos concentramos en la cantidad de votos registrados para los restantes seis 'codigo\_votos'. Estos representan a cada uno de los seis partidos que participaron en la elecci\'on de diputados nacionales por la Capital Federal:
+Los c\'odigos de votos del 9001 al 9006 indican varios datos como la cantidad de electores inscriptos en la mesa, de votos en blanco, nulos y recurridos. Como el resultado final de la elecci\'on \emph{no} depende de ninguno de ellos, s\'olo nos concentramos en la cantidad de votos afirmativos registrados para los restantes seis 'codigo\_votos'. Estos representan a cada uno de los seis partidos que participaron en la elecci\'on de diputados nacionales por la Capital Federal:
 
 \begin{center}
 	\begin{tabular}{ll}
@@ -165,11 +163,11 @@ Si se quiere conocer en detalle las "entra\~nas" de los simuladores, recomendamo
 
 \subsubsection{Simulador de la noche del escrutinio}
 
-A las 18hs del d\'ia de la elecci\'on, las autoridades de mesa dan por terminado el comicio y comienzan a contar los votos. A medida que terminan dicha tarea, se le entrega al personal de Correo Argentino las urnas y un telegrama por mesa, donde se encuentra el resumen de lo ocurrido en ella, y cuyo contenido ya comentamos brevemente. Una vez que toda las mesas de una escuela fueron contabilizadas, los telegramas son enviados a un centro de c\'omputos, donde un pequen\~o ej\'ercito de tipeadores de datos digitaliza a mano los n\'umeros contenidos en cada telegrama.
+A las 18hs del d\'ia de la elecci\'on, las autoridades de mesa dan por terminado el comicio y comienzan a contar los votos. A medida que terminan dicha tarea, le entregan a personal de Correo Argentino las urnas y un telegrama por mesa con el conteo de sus votos. Una vez que toda las mesas de una escuela fueron cerradas y los recuentos terminados, los telegramas son enviados al centro de c\'omputos electoral, donde un pequen\~o ej\'ercito de tipeadores de datos digitaliza a mano los n\'umeros contenidos en cada telegrama.
 
-Los telegramas son cargados dos veces por tipeadores distintos (que no ven lo que carg\'o el otro), y si alguno de los campos ingresados no coincide, un tercero desempata.
+Los telegramas son cargados dos veces por tipeadores distintos (que no ven lo que carg\'o el otro), y si lo ingresado no coincide en alguno de los campos, un tercero desempata.
 
-Tenemos entonces dos fuentes de aleatoriedad en el orden de escrutinio de los votos: primero, en funci\'on de qu\'e escuelas terminan m\'as r\'apido el conteo; segundo, en funci\'on de que en el centro de c\'omputos mismo la carga de datos es realizada simult\'aneamente por numerosas personas, y con doble chequeo.
+Tenemos entonces dos fuentes de aleatoriedad en el orden de escrutinio de los votos: primero, en funci\'on de qu\'e escuelas terminan m\'as r\'apido el conteo; segundo, porque en el centro de c\'omputos la carga de datos es realizada simult\'aneamente por numerosas personas, y con doble o triple chequeo.
 
 Nuestro supuesto simplificador entonces, ser\'a que en el fondo, el orden en el que los resultados de las 7256 mesas se contabilizan la noche del escrutinio, es perfectamente aleatorio. En la realidad, dicho orden es mayormente aleatorio por las razones que acabamos de mencionar, pero no \emph{completamente} aleatorio.
 
@@ -192,27 +190,25 @@ Este simulador se puede pensar como una funci\'on que toma dos par\'ametros: un 
 	\item $g$ puede ser 'mesas', 'circuitos' o 'secciones'
 \end{itemize}
 
-Con esos par\'ametros determinados, el simulador determinar\'a cu\'antos votos tomar de cada $g$, para que el tama\~no esperado de la muestra sea $n$. Siendo $p_{i}$ la poblaci\'on del agregado $i$, $P$ la poblaci\'on total, la cantidad de votos $m_{i}$ a tomar de dicha seccion, circuito o mesa ser\'a:
+Con esos par\'ametros determinados, el simulador determinar\'a cu\'antos votos tomar de cada $g$, para que el tama\~no esperado de la muestra sea $n$. Siendo $p_{i}$ la poblaci\'on del agregado $i$ y $P$ la poblaci\'on total, la cantidad de votos $m_{i}$ a tomar de dicho agregado ser\'a:
 $$ m_{i} = \frac{p_{i}}{P} \times{} n $$
 	Si $m_{i}$ no resultase entero, se tomar\'an aleatoriamente el piso o techo de $m_{i}$ votos de manera que a la larga, en promedio, se est\'en tomando exactamente $m_{i}$ votos de dicho agregado.
 
-Por ejemplo, si hubiese s\'olo dos mesas con 34 y 66 votos cada una, y se especificara $n=10$, habr\'a que tomar 3,4 votos de la primer mesa, y 6,6 de la segunda. Para ello, de la primer mesa se tomar\'an 3 votos en el \%60 de los casos, y 4 votos el \% restante. De la segunda mesa, se tomaran 6 votos el 40\% de los casos, y 7 el \%40 restante.
+Por ejemplo, si hubiese s\'olo dos mesas con 34 y 66 votos cada una, y se especificara $n=10$, habr\'a que tomar 3,4 votos de la primer mesa, y 6,6 de la segunda. Para ello, de la primer mesa se tomar\'an 3 votos en el \%60 de los casos, y 4 votos el \%40 restante. De la segunda mesa, se tomaran 6 votos el 40\% de los casos, y 7 el \%40 restante.
 
+Luego, se calculan los pesos asociados a cada elemento de la muestra, dependiendo de qu\'e agregado vengan, como la raz\'on entre la cantidad total de votos en el agregado y la cantidad de votos del agregado en la muestra. En el ejemplo anterior, si tomamos 3 votos de la mesa de 34, cada voto contar\'a por $34/3 = 11,333...$ votos, pero si tomamos 4, cada uno contar\'a por $34/4 = 8,5$.
 
-Luego, se calculan los pesos asociados a cada elemento de dependiendo de qu\'e agregado vengan, como la raz\'on entre la cantidad total de votos en el agregado y la cantidad de votos del agregado en la muestra. En el ejemplo anterior, si tomamos 3 votos de la mesa de 34, cada voto contar\'a por $34/3 = 11,333...$ votos, pero si tomamos 4, cada uno contar\'a por $34/4 = 8,5$.
+Una vez hechos todos los c\'alculos, se extraen al azar de cada agregado la cantidad de votos previamente determinada, se los pondera por su peso asociado, y con todos ellos juntos se construye la muestra final.
 
-Una vez hechos todos los c\'alculos, se extraen al azar de cada agregado la cantidad de votos previamente determinada, se los pondera por su peso asociado, y se construye la muestra final.
-
-Por el elemento aleatorio que utilizamos para volver entera la cantidad de votos tomados de cada agregado, el tama\~no final de la muestras puede no ser exactamente $n$ sino un poco mayor o menor. Sin embargo, esto es irrelevante, pues al calcular los pesos de cada observaci\'on en la muestra, el peso final de cada agregado es exactamente proporcional al tama\~no de su poblaci\'on.
+Por el elemento aleatorio que utilizamos para volver entera la cantidad de votos tomados de cada agregado, el tama\~no final de las muestras puede no ser exactamente $n$ sino un poco mayor o menor. Sin embargo, esto es irrelevante, pues al calcular los pesos de cada observaci\'on en la muestra, el peso final de cada agregado es exactamente proporcional al tama\~no de su poblaci\'on.
 
 El producto de una simulaci\'on dada entonces, ser\'a un vector de 6 componentes, que son las cantidades de votos que cada partido hubiese obtenido en la elecci\'on si la poblaci\'on entera votase exactamente igual que la muestra elegida.
-
 
 \subsubsection{Generaci\'on de datos experimentales.}
 
 \paragraph{Simulador del escrutinio}
 
-Con el simulador del escrutinio, se generaron cien mil (100.000) posibles ordenes de carga de los telegramas, y para cada uno de ellos se comput\'o la evoluci\'on de los porcentajes de votos recibidos por cada candidato en funci\'on del n\'umero de mesas escrutadas $n$. Estas son las primeras y \'ultimas 10 l\'ineas de la matriz generada por una simulaci\'on cualquiera:
+Con el simulador del escrutinio, se generaron mil (1.000) posibles ordenes de carga de los telegramas, y para cada uno de ellos se comput\'o la evoluci\'on de los porcentajes de votos recibidos por cada candidato a medida que se escrutaban cada una de las 7256 mesas. Estas son las primeras y \'ultimas 10 l\'ineas de la matriz generada por una simulaci\'on cualquiera:
 
 \begin{center}
 	\begin{tabular}{l | llllll}
@@ -241,15 +237,15 @@ n & AYL & FPV & UNEN & PRO & FIT & CP \\ \hline
 	\end{tabular}
 \end{center}
 
-A simple vista se puede observar que los prorcentajes var\'ian considerablemente al comienzo, para estabilizarse alrededor de sus valores reales hacia el final del escrutinio, aunque todav\'ia se peuden observar peque\~nas variaciones centesimales como el de AYL al contabilizar la mesa n\'umero 7253.
+A simple vista se puede observar que los prorcentajes var\'ian considerablemente al comienzo, para estabilizarse alrededor de sus valores reales hacia el final del escrutinio, aunque todav\'ia se peuden observar peque\~nas variaciones centesimales como la de AYL al contabilizar la mesa n\'umero 7253.
 
 \paragraph{Simulador de muestras}
 
-Con el simulador de muestras, se consideraron 51 tama\~nos muestrales distintos, creciendo a raz\'on geom\'etrica desde $n=10$ hasta $n=10.000$. El \'iesimo $n$ est\'a dado por la ecuaci\'on:
+Con el simulador de muestras, se consideraron 21 tama\~nos muestrales distintos, creciendo a raz\'on geom\'etrica desde $n=10$ hasta $n=100.000$. El \'iesimo $n$ est\'a dado por la ecuaci\'on:
 
-$$ n_{i} = 10^{1 + 3 \times \frac{i}{50}} $$
+$$ n_{i} = 10^{1 + 4 \times \frac{i}{20}} $$
 
-... de modo que $n_{0}=10^{1}=10$ y $n_{50}=10^{4}=10.000$. Se generaron luego 10.000 muestras aleatorias para cada $n$, para un gran total de quinientas diez mil muestras (510.000). A continuaci\'on se observan los porcentajes de votos en muestras tomadas al azar de 10, 100, 1.000 y 10.000 elementos.
+... de modo que $n_{0}=10^{1}=10$ y $n_{20}=10^{5}=100.000$. Se generaron luego 10.000 muestras aleatorias para cada $n$, totalizando unas quinientas diez mil muestras (510.000). A continuaci\'on se observan los porcentajes de votos en muestras tomadas al azar de 10, 100, 1.000 y 10.000 elementos.
 
 \begin{center}
 	\begin{tabular}{l | llllll}
@@ -279,12 +275,41 @@ $$ n_{i} = 10^{1 + 3 \times \frac{i}{50}} $$
 
 Aqu\'i se observa claramente que a medida que el tama\~no muestral considerado aumenta, los porcentajes de votos por candidato se estabilizan alrededor de los valores reales.
 
+\section{Desarrollo}
+
+\subsection{Sobre la medici\'on del error de predicci\'on}
+
+A partir de una muestra cualquiera, es un hecho bien conocido que la frecuencia relativa de ocurrencia de un fen\'omeno es un estimador insesgado de su verdadera frecuencia realtiva poblacional. A la hora de estimar porcentajes de votos, esto significa que si 15 de 100 personas dicen votar a Fulano, lo m\'as probable es que el 15\% de la poblaci\'on vote a Fulano. Mucho menos trivial sin embargo, a la hora de evaluar el desempe\~o de una predicci\'on, es la medici\'on de su error.
+La primer f\'ormula que viene a la mente es la suma, suele ser la suma cuadrado de los desv\'ios. Siendo $e_{i}$ el porcentajes de votos estimado para el candidato $i$, y $r_{i}$ el porcentaje real de votos obtenido, podemos definir el error del estimador como:
+
+$$ E(e|r) = \sum\limits_{i=0}^{n} (e_{i} - r_{i})^2 $$
+
+Un problema no trivial con ella, es que al incluir un cuadrado, las unidades en las que est\'a expresado el error no guardan ninguna relaci\'on directa con las unidades en la que est\'a expresada la predicci\'on: puntos porcentuales.
+
+A su vez, aunque esta f\'ormula la hemos usado cientos de veces para medir la varianza de uan distribuci\'on en clases de Estad\'istica, siempre la utilizamos para medir la varianza de \emph{un} par\'ametro. Sin embargo, al estimar los porcentajes de votos para $c$ candidatos, estamos en efecto produciendo $c-1$ estimadores: uno para cada uno de los candidatos, salvo el \'ultimo que forzosamente dar\'a cien menos la suma de todos los dem\'as.
+
+Al entrar en territorio tan distinto al del estudio tradicional, no tenemos razones a priori para suponer que otras f\'ormulas de medici\'on del error de un estimador no son al menos tan buenas como \'esta. Una forma interesante de medir el error, por ejemplo, ser\'ia calculando por D'Hont cu\'antas bancas le corresponden a cada partido, y observando luego por cu\'antas bancas dicha predicci\'on difiere de la realidad.
+Para mantener el an\'alisis lo m\'as sencillo posible, en estre trabajo elegimos una f\'ormula similar a la original: la suma de los desv\'ios absolutos.
+
+$$ E(e|r) = \sum\limits_{i=0}^{n} | e_{i} - r_{i} | $$
+
+Esta sencilla f\'ormula, tiene una gran ventaja a la hora de interpretar sus valores: est\'a en las mismas unidades que el estimador analizado. As\'i, representa de manera bastante sencilla "por cu\'anto le err\'o" la predicci\'on global al resultado real. Si dos candidatos obtuviesen el 30 y 70\% de los votos cada uno, y una estimaci\'on los pusiera en 35/65\%, su \emph{error absoluto} ser\'ia de 10 puntos. De hecho, 10\% es exactamente el porcentaje de los votos totales que l estimador predijo incorrectamente: un 5\% que supon\'iamos iba a votar al primer candidato y no lo hizo, y otro 5\% que cre\'imos no iba a votar al segundo, pero lo vot\'o.
+
+Mas all\'a de la discusi\'on te\'orica, vale remarcar que la utilidad de estimar el error para nuestros prop\'ositos, no radica tanto en estimar el error en s\'i, sino en la obseraci\'on de su evoluci\'on: a medida que se reduce la variaci\'on del error, aumenta la estabilidad del pron\'ostico, y con ella la confianza que nosotros deber\'iamos tenerle.
+
+\subsection{?`Cu\'ando es hora de felicitar a los ganadores?}
+
+Obviamente es necesario esperar hasta el final de la elecci\'on para conocer el resultado exacto, y dada la particularidades del sistema D'Hont para asignar bancas, a veces diferencias porcentuales muy peque\~nas pueden mantener en vilo a los candidatos. Aunque no podamos estimar exactamente nunca este tipo de incertidumbres, s\'i podemos al menos intentar identificar tendencias. Veamos por ejemplo c\'omo les fue a los principales contendientes, UNEN y el PRO en nuestras mil simulaciones. Dirija Ud. lector su atenci\'on ahora al \textit{Gr\'afico I: \'Areas de incertidumbre para los porcentajes de votos obtenidos por UNEN y PRO}. (Si a\'un no est\'a leyendo este trabajo con los gr\'aficos al lado, es un buen momento para comenzar. Si no, todo el palabrer\'io le va a resultar muy confuso.)
+
+
+Las tres l\'ineas 
+
+
 
 \section{Referencias}
 electoral-2013-diputados-nacionales.csv
 txt con la descripcion del dataset
 Manual para autoridades de mesa de la DINE
 experiencia personal y comentarios de funcionarios de la DINE sobre funcionamiento del conteo de votos
-
 
 \end{document}

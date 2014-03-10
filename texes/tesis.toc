@@ -1,0 +1,18 @@
+\select@language {spanish}
+\contentsline {section}{\numberline {1}Nota al lector}{4}{section.1}
+\contentsline {section}{\numberline {2}Introducci\'on}{5}{section.2}
+\contentsline {subsection}{\numberline {2.1}El fen\'omeno}{5}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Estrategia de an\'alisis}{5}{subsection.2.2}
+\contentsline {section}{\numberline {3}Dise\~no experimental}{7}{section.3}
+\contentsline {subsection}{\numberline {3.1}Caracter\'isticas del dataset}{7}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Transformaci\'on de los datos.}{8}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Dise\~no de los simuladores}{8}{subsection.3.3}
+\contentsline {subsubsection}{\numberline {3.3.1}Simulador de la noche del escrutinio}{8}{subsubsection.3.3.1}
+\contentsline {subsubsection}{\numberline {3.3.2}Simulador de muestras aleatorias}{9}{subsubsection.3.3.2}
+\contentsline {subsubsection}{\numberline {3.3.3}Generaci\'on de datos experimentales.}{10}{subsubsection.3.3.3}
+\contentsline {paragraph}{Simulador del escrutinio}{10}{section*.2}
+\contentsline {paragraph}{Simulador de muestras}{11}{section*.3}
+\contentsline {section}{\numberline {4}Desarrollo}{12}{section.4}
+\contentsline {subsection}{\numberline {4.1}Sobre la medici\'on del error de predicci\'on}{12}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}?`Cu\'ando es hora de felicitar a los ganadores?}{13}{subsection.4.2}
+\contentsline {section}{\numberline {5}Referencias}{14}{section.5}
