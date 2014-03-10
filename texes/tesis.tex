@@ -27,7 +27,7 @@
 	breaklines=true}
 
 \setlength\parindent{1cm}
-\linespread{1.3}
+\linespread{1.1}
 
 \begin{document}
 
@@ -41,7 +41,7 @@
 
 \begin{abstract}
 	A partir del estudio de los resultados de las elecciones legislativas de Octubre 2013, pretendemos dar una idea emp\'irica de los considerables m\'argenes de error inherentes en cualquier predicci\'on electoral. Dado que se cuenta con datos para el total de la poblaci\'on, las tradicionales y complejas ecuaciones para estimar el error de \emph{una} muestra son reemplazadas por simulaciones que lo computan para \emph{decenas de miles} de muestra aleatorias.
-	El estudio del error en muestras generadas de manera perfectamente aleatoria, sirve no s\'olo para entender el problema en abstracto, sino como cota superior para el nivel de precisi\'on que pueden alcanzar muestreos realizados en la vida real. Discutiremos las condiciones bajo las cuales los resutlados expuestos se sostienen, y las implicancias pr\'acticas de estos.
+	El estudio del error en muestras generadas de manera perfectamente aleatoria, sirve no s\'olo para entender el problema en abstracto, sino como cota superior para el nivel de precisi\'on que pueden alcanzar muestreos realizados en la vida real. Discutiremos las condiciones bajo las cuales los resultados expuestos se sostienen, y las implicancias pr\'acticas de estos.
 \end{abstract}
 
 \pagebreak
@@ -58,38 +58,37 @@ Como consecuencia, y para alegr\'ia del - probablemente inexistente - lector no 
 
 Por lo tanto, se recomienda tener los gr\'aficos lado a lado con el cuerpo de texto, como si esto fuese una presentaci\'on narrada. !`Int\'entelo!
 
-\pagebreak
-
 \section{Introducci\'on}
 
 \subsection{El fen\'omeno}
 
-Supongamos que queremos estimar la distribuci\'on del par\'ametro $\phi$ en la poblacion $P$, con precisi\'on $\alpha$. Para ello, habremos de extraer una muestra de $P$ de tama\~no $n$. Parad\'ojicamente, para estimar qu\'e $n$ es lo suficientemente grande como para garantizar precisi\'on $\alpha$, es necesario conocer la distribucion de $\phi$ en $P$ - !`exactamente lo que prentend\'iamos estimar en primer lugar!.
+Supongamos que queremos estimar la distribuci\'on del par\'ametro $\phi$ en la poblaci\'on $P$, con precisi\'on $\alpha$. Para ello, habremos de extraer una muestra de $P$ de tama\~no $n$. Parad\'ojicamente, para estimar qu\'e $n$ es lo suficientemente grande como para garantizar precisi\'on $\alpha$, es necesario conocer la distribucion de $\phi$ en $P$ - !`exactamente lo que prentend\'iamos estimar en primer lugar!.
 
-Romper este c\'irculo vicioso es sencillamente imposible en la enorme mayor\'ia de los experimentos tradicionales, ya que $n$ puede ser varios ordenes de magnitud menor que la $P$: de hecho, no poder analizar una poblaci\'on entera es el principal motivo para analizar muestras (o subconjuntos) de ella. En consecuencia, el $n$ utilizado en un estudio cientifico o una encuesta por s\'i solo \emph{no} es un buen indicador de la precisi\'on de los resultados. La \'unica forma segura de escapar de la trampa, es analizando la poblaci\'on entera, cosa que - casi -nunca es posible.
+Romper este c\'irculo vicioso es sencillamente imposible en la enorme mayor\'ia de los experimentos tradicionales, ya que requerir\'ia examinar la poblaci\'on entera, y $n$ suele ser varios ordenes de magnitud menor que $P$. En consecuencia, el $n$ utilizado en un estudio cient\'ifico o una encuesta por s\'i solo \emph{no} es un buen indicador de la precisi\'on de los resultados. La \'unica forma segura de escapar la trampa - analizar la poblaci\'on entera - casi nunca es factible.
 
-Los resultados electorales publicados por la Direcci\'on Nacional Electoral en el portal de Datos P\'ublicos del Gobierno de la Naci\'on, nos proveen de una bienvenida excepci\'on a la regla. Se encuentran disponibles digitalmente las cantidades de votos registrados en cada una de las mesas de la Capital Federal, entre otros. Si $P$ es ahora la pobloci\'on de votantes, y $\phi$ representa el partido por el cual se vot\'o, podemos estimar qu\'e precisi\'on en la estimaci\'on de $\phi$ nos garantiza un determinado $n$.
+Los resultados publicados por la Direcci\'on Nacional Electoral en el portal de Datos P\'ublicos del Gobierno de la Naci\'on, nos proveen de una bienvenida excepci\'on a la regla. Entre otros, se encuentran disponibles digitalmente las cantidades de votos registrados en cada una de las mesas de la Capital Federa. Si $P$ es ahora la poblaci\'on de votantes de la ciudad, y $\phi$ representa el partido por el cual vot\'o cada uno, podemos estimar qu\'e precisi\'on en la estimaci\'on de $\phi$ nos garantiza un determinado $n$.
 
 \subsection{Estrategia de an\'alisis}
-?`Qu\'e confianza podemos tener en el estimador de $\phi$ derivado de una muestra de tama\~no $n$? Obviamente, conocer c\'omo vot\'o la poblaci\'on completa facilita este an\'alisis, pero bajo ning\'un oncepto lo trivializa. Computar el error de estimaci\'on \emph{para toda muestra posible} de $n$ votantes se vuelve r\'apidamente una tarea herc\'ulea: Con m\'as de 1.800.000 votos emitidos, la cantidad de muestras con un mero $n=10$ son $9.83 \times 10^{55}$.
+?`Qu\'e confianza podemos tener en el estimador de $\phi$ derivado de una muestra de tama\~no $n$? es la pregunta que guiar\'a nuestro trabajo. Obviamente, conocer c\'omo vot\'o la poblaci\'on completa facilita este an\'alisis, pero bajo ning\'un oncepto lo trivializa. Computar el error de estimaci\'on \emph{para toda muestra posible} de $n$ votantes se vuelve r\'apidamente una tarea herc\'ulea: con m\'as de 1.800.000 votos emitidos, la cantidad de muestras con un mero $n=10$ es $9.83 \times 10^{55}$, un 9 seguido de 55 ceros.
 
-Imposibilitados de calcular \emph{todas} las posibles muestras, s\'i podemos sin embargo simular enormes cantidades de ellas. Para hacerlo, se programaron en Ruby dos simuladores, que intentar emular las condiciones de los  dos estimadores m\'as comunes del resultado final de la eleccion: el conteo provisorio, y las encuestas pre-electorales.
+Imposibilitados de calcular \emph{todas} las posibles muestras, s\'i podemos sin embargo simular enormes cantidades de ellas. Para hacerlo, se programaron en Ruby dos simuladores, que intentar emular las condiciones de los  dos estimadores m\'as comunes del resultado final de la eleccion: el recuento provisorio, y las encuestas pre-electorales.
 
-El "simulador de la noche del escrutinio" (SNE), primero aleatoriza el orden de recuento de los telegramas de cada mesa, y luego computa la evoluci\'on del resultado provisorio a medida que avanza el porcentaje de mesas escrutadas. Con \'el, podemos observar como la adici\'on de nueva informaci\o'on a un pron\'ostico preexistente lo va mejorando, y a qu\'e ritmo.
-El "simulador de muestras aleatorias" (SMA), nos permite extraer de la poblaci\'on total, muestras perfectamente aleatorias de tama\~no $n$, respetando en los pesos el tama\~no de cada circuito y secci\'on electoral). Con \'el, podremos estudiar de manera directa la \emph{poblaci\'on de muestras} del tama\~no deseado, algo que el investigador con una \'unica muestra se encuentra incapacitado.
+El "simulador de la noche del escrutinio", primero aleatoriza el orden de recuento de los telegramas de cada mesa, y luego computa la evoluci\'on del resultado provisorio a medida que avanza el porcentaje de mesas escrutadas. Con \'el, podemos observar como la adici\'on de nueva informaci\o'on a un pron\'ostico preexistente lo va mejorando, y a qu\'e ritmo.
 
-A partir de los datos generados por estos dos simuladores, se intentar\'a dar una idea de la interaccion entre el tamano muestral y el error del estimador asociado, visualizando la informacion de distintas formas y extrayendo algunos - muy pocos - resultados num\'ericos.
+El "simulador de muestras aleatorias" nos permite extraer de la poblaci\'on total muestras perfectamente aleatorias de tama\~no $n$, respetando en los pesos el tama\~no de cada circuito y secci\'on electoral). Con \'el, podremos estudiar de manera directa la \emph{poblaci\'on de muestras} del tama\~no deseado, algo que el investigador con una \'unica muestra a su disposici\'on no puede realizar.
 
-Discutiremos luego las implicancias pr\'acticas de los resultados observados, y estableceremos los supuestos bajo los cuales \'estos se pueden generalizar a situaciones similares.
+A partir de los datos generados por estos dos simuladores, se intentar\'a dar una idea de la interacci\'on entre el tama\~no muestral y el error del estimador asociado, visualizando la informacion de distintas formas y extrayendo algunos - muy pocos - resultados num\'ericos.
+
+Discutiremos luego las implicancias pr\'acticas de los resultados observados, y estableceremos ciertos supuestos bajo los cuales \'estos se pueden generalizar -cuidadosamente - a situaciones similares.
 
 
 \pagebreak
 
-\section{Dise\~no experimental}
+\section{Dise\~no Experimental}
 
 \subsection{Caracter\'isticas del dataset}
 
-La Direcci\'on Nacional Electoral, a trav\'es del Portal de Datos P\'ublicos del Gobierno de la Naci\'on, nos provee de toda la informaci\'on imaginable sobre los m\'as recientes resultados electorales. Para realizar este trabajo, descargamos el archivo 'electoral-2013-diputados-nacionales.csv' que contiene las cantidades de votos registrados en todas las mesas del pa\'is para la elecci\'on de diputados nacionales. Estas son las primeras de las mas de 22 millones de l\'ineas del archivo:
+La Direcci\'on Nacional Electoral, a trav\'es del Portal de Datos P\'ublicos del Gobierno de la Naci\'on, nos provee de toda la informaci\'on imaginable sobre los m\'as recientes resultados electorales. Para realizar este trabajo, descargamos el archivo 'electoral-2013-diputados-nacionales.csv' que contiene las cantidades de votos registrados en todas las mesas del pa\'is para la elecci\'on de diputados nacionales. Estas son las primeras de las m\'as de 22 millones de l\'ineas del archivo:
 
 \begin{center}
 	\begin{tabular}{ llllll }
@@ -130,9 +129,9 @@ Los c\'odigos de votos del 9001 al 9006 indican varios datos como la cantidad de
 	\end{tabular}
 \end{center}
  
-\subsection{Transformaci\'on de los datos.}
+\subsection{Transformaci\'on de los datos}
 
-Para manipular m\'as f\'acilmente la informaci\'on, con la ayuda de un poco de c\'odigo en SQL (Ver Anexo II) se transform\'o la tabla en una equivalente, donde esta vez cada mesa est\'a representada por una \'unica l\'inea:
+Para manipular m\'as f\'acilmente la informaci\'on, con la ayuda de un poco de c\'odigo en SQL (ver Anexo II) se transform\'o la tabla en una equivalente, donde cada mesa est\'a representada por una \'unica l\'inea:
 
 \begin{center}
 	\begin{tabular}{l | llllll}
@@ -146,13 +145,13 @@ mesa & AYL & FPV & UNEN & PRO & FIT & CP \\ \hline
 	\end{tabular}
 \end{center}
 
-En este punto fueron eliminadas del conjunto unas 7 mesas que indicaban un total de cero votos afirmativos, dejando finalmente 7256 mesas.
+En este punto fueron eliminadas del conjunto unas 7 mesas que indicaban un total de cero votos afirmativos, dejando 7256 mesas.
 
-Sumando los resultados por mesa a nivel seccion y circuito, se confeccionaron tablas con formato id\'entico a esta \'ultima, pero donde cada l\'inea representa la cantidad de votos por partido a nivel circuito y secciones, respectivamente.
+Sumando los resultados por mesa a nivel secci\'on y circuito, se confeccionaron tablas con formato id\'entico a esta \'ultima, pero donde cada l\'inea representa la cantidad de votos por partido a nivel de secciones y circuitos, respectivamente.
 
 \subsection{Dise\~no de los simuladores}
 
-En esta secci\'oin explicaremos brevemente y sin tecnicismo los pasos que sigue nuestro programa para correr una simulaci\'on y obtener los resultados de ella. 
+En esta secci\'oin explicaremos brevemente y sin tecnicismos los pasos que sigue nuestro programa para correr una simulaci\'on y generar sus resultados. 
 Si se quiere conocer en detalle las "entra\~nas" de los simuladores, recomendamos consultar directamente el c\'odigo fuente, que se encuentra en su totalidad en el Anexo II. Para facilitar la lectura, se proveen comentarios detallados acerca de su funcionamiento.
 
 \subsubsection{Simulador de la noche del escrutinio}
@@ -173,7 +172,7 @@ En una simulaci\'on dada, entonces, nuestro programa ejecutar\'a los siguientes 
 	\item Transformar a cada paso las sumas parciales de votos que recibi\'o cada partido, en los porcentajes correspondientes.
 \end{enumerate}
 
-Cada simulaci\'on producir\'a, finalmente, una matriz de 6 X 7256, donde el elemento en la posici\'on (i,j) es el porcentaje de votos recibidos por el partido 'j' cuando se llevan contabilizadas 'i' mesas. La \'ultima fila de la matriz ser\'a id\'entica en todas las simulaciones (y coincidir\'a con el verdadero porcentaje de los votos que recibi\'o cada partido, uan vez escrutada la totalidad de las mesas.
+Cada simulaci\'on producir\'a, finalmente, una matriz de $7256 \times 6$, donde el elemento en la posici\'on $(i,j)$ es el porcentaje de votos recibidos por el partido 'j' cuando se llevan contabilizadas 'i' mesas. La \'ultima fila de la matriz ser\'a id\'entica en todas las simulaciones y coincidir\'a necesariamente con el verdadero porcentaje de los votos que recibi\'o cada partido, uan vez escrutada la totalidad de las mesas.
 
 \subsubsection{Simulador de muestras aleatorias}
 
@@ -184,11 +183,15 @@ Este simulador se puede pensar como una funci\'on que toma dos par\'ametros: un 
 	\item $g$ puede ser 'mesas', 'circuitos' o 'secciones'
 \end{itemize}
 
-Con esos par\'ametros determinados, el simulador determinar\'a cu\'antos votos tomar de cada $g$, para que el tama\~no esperado de la muestra sea $n$. Siendo $p_{i}$ la poblaci\'on del agregado $i$ y $P$ la poblaci\'on total, la cantidad de votos $m_{i}$ a tomar de dicho agregado ser\'a:
-$$ m_{i} = \frac{p_{i}}{P} \times{} n $$
-	Si $m_{i}$ no resultase entero, se tomar\'an aleatoriamente el piso o techo de $m_{i}$ votos de manera que a la larga, en promedio, se est\'en tomando exactamente $m_{i}$ votos de dicho agregado.
+A pesar de tomar muestras aleatoias dentro de cada mesa, curcuito o secci\'on, el simulador mantiene siempre la representatividad greogr\'afica de los agregados. EN nuestro an\'alisis, las muestras ser\'an generadas siempre al nivel de los 167 circuitos.
 
-Por ejemplo, si hubiese s\'olo dos mesas con 34 y 66 votos cada una, y se especificara $n=10$, habr\'a que tomar 3,4 votos de la primer mesa, y 6,6 de la segunda. Para ello, de la primer mesa se tomar\'an 3 votos en el \%60 de los casos, y 4 votos el \%40 restante. De la segunda mesa, se tomaran 6 votos el 40\% de los casos, y 7 el \%40 restante.
+Con $n$ y $g$ determinados, el simulador determinar\'a cu\'antos votos tomar de cada $g$, para que el tama\~no esperado de la muestra sea $n$. Siendo $p_{i}$ la poblaci\'on del agregado $i$ y $P$ la poblaci\'on total, la cantidad de votos $m_{i}$ a tomar de dicho agregado ser\'a:
+
+$$ m_{i} = \frac{p_{i}}{P} \times{} n $$
+
+Si $m_{i}$ no resultase entero, se tomar\'an aleatoriamente el piso o techo de $m_{i}$ votos de manera que a la larga, en promedio, se est\'en tomando exactamente $m_{i}$ votos de dicho agregado.
+
+Por ejemplo, si hubiese s\'olo dos mesas con 34 y 66 votos cada una, y se especificara $n=10$, habr\'a que tomar 3,4 votos de la primer mesa, y 6,6 de la segunda. Para ello, de la primer mesa se tomar\'an 3 votos en el \%60 de los casos, y 4 votos el \%40 restante. De la segunda mesa, se tomaran 6 votos el 40\% de los casos, y 7 el \%60 restante.
 
 Luego, se calculan los pesos asociados a cada elemento de la muestra, dependiendo de qu\'e agregado vengan, como la raz\'on entre la cantidad total de votos en el agregado y la cantidad de votos del agregado en la muestra. En el ejemplo anterior, si tomamos 3 votos de la mesa de 34, cada voto contar\'a por $34/3 = 11,333...$ votos, pero si tomamos 4, cada uno contar\'a por $34/4 = 8,5$.
 
@@ -196,13 +199,14 @@ Una vez hechos todos los c\'alculos, se extraen al azar de cada agregado la cant
 
 Por el elemento aleatorio que utilizamos para volver entera la cantidad de votos tomados de cada agregado, el tama\~no final de las muestras puede no ser exactamente $n$ sino un poco mayor o menor. Sin embargo, esto es irrelevante, pues al calcular los pesos de cada observaci\'on en la muestra, el peso final de cada agregado es exactamente proporcional al tama\~no de su poblaci\'on.
 
-El producto de una simulaci\'on dada entonces, ser\'a un vector de 6 componentes, que son las cantidades de votos que cada partido hubiese obtenido en la elecci\'on si la poblaci\'on entera votase exactamente igual que la muestra elegida.
+El producto de una simulaci\'on dada entonces, ser\'a un vector de 6 componentes, que representa las cantidades de votos que cada partido hubiese obtenido en la elecci\'on si la poblaci\'on entera votase exactamente igual que la muestra elegida.
 
 \subsubsection{Generaci\'on de datos experimentales.}
 
 \paragraph{Simulador del escrutinio}
 
 Con el simulador del escrutinio, se generaron mil (1.000) posibles ordenes de carga de los telegramas, y para cada uno de ellos se comput\'o la evoluci\'on de los porcentajes de votos recibidos por cada candidato a medida que se escrutaban cada una de las 7256 mesas. Estas son las primeras y \'ultimas 10 l\'ineas de la matriz generada por una simulaci\'on cualquiera:
+
 
 \begin{center}
 	\begin{tabular}{l | llllll}
@@ -231,15 +235,15 @@ n & AYL & FPV & UNEN & PRO & FIT & CP \\ \hline
 	\end{tabular}
 \end{center}
 
-A simple vista se puede observar que los prorcentajes var\'ian considerablemente al comienzo, para estabilizarse alrededor de sus valores reales hacia el final del escrutinio, aunque todav\'ia se peuden observar peque\~nas variaciones centesimales como la de AYL al contabilizar la mesa n\'umero 7253.
+A simple vista se puede observar que los prorcentajes var\'ian considerablemente al comienzo, para estabilizarse alrededor de sus valores reales hacia el final del escrutinio, aunque todav\'ia se pueden observar peque\~nas variaciones centesimales como la de AYL al contabilizar la mesa n\'umero 7253.
 
 \paragraph{Simulador de muestras}
 
-Con el simulador de muestras, se consideraron 21 tama\~nos muestrales distintos, creciendo a raz\'on geom\'etrica desde $n=10$ hasta $n=100.000$. El \'iesimo $n$ est\'a dado por la ecuaci\'on:
+Con el simulador de muestras, se consideraron 21 tama\~nos muestrales distintos, creciendo a raz\'on geom\'etrica entre $n=10$ hasta $n=100.000$. El \'iesimo $n$ est\'a dado por la ecuaci\'on:
 
 $$ n_{i} = 10^{1 + 4 \times \frac{i}{20}} $$
 
-... de modo que $n_{0}=10^{1}=10$ y $n_{20}=10^{5}=100.000$. Se generaron luego 10.000 muestras aleatorias para cada $n$, totalizando unas quinientas diez mil muestras (510.000). A continuaci\'on se observan los porcentajes de votos en muestras tomadas al azar de 10, 100, 1.000 y 10.000 elementos.
+... de modo que $n_{0}=10^{1}=10$ y $n_{20}=10^{5}=100.000$. Se generaron luego 10.000 muestras aleatorias para cada $n$, totalizando unas doscientas diez mil muestras (210.000). A continuaci\'on se observan los porcentajes de votos en muestras tomadas al azar de 10, 100, 1.000 y 10.000 elementos.
 
 \begin{center}
 	\begin{tabular}{l | llllll}
@@ -267,68 +271,75 @@ $$ n_{i} = 10^{1 + 4 \times \frac{i}{20}} $$
 	\end{tabular}
 \end{center}
 
-Aqu\'i se observa claramente que a medida que el tama\~no muestral considerado aumenta, los porcentajes de votos por candidato se estabilizan alrededor de los valores reales.
+Aqu\'i se observa claramente que a medida que el tama\~no muestral considerado aumenta, los porcentajes de votos por candidato se estabilizan alrededor de los valores reales, cor m\'argenes de error continuamente decrecientes.
 
 \section{Desarrollo}
 
 \subsection{Sobre la medici\'on del error de predicci\'on}
 
-A partir de una muestra cualquiera, es un hecho bien conocido que la frecuencia relativa de ocurrencia de un fen\'omeno es un estimador insesgado de su verdadera frecuencia realtiva poblacional. A la hora de estimar porcentajes de votos, esto significa que si 15 de 100 personas dicen votar a Fulano, lo m\'as probable es que el 15\% de la poblaci\'on vote a Fulano. Mucho menos trivial sin embargo, a la hora de evaluar el desempe\~o de una predicci\'on, es la medici\'on de su error.
-La primer f\'ormula que viene a la mente es la suma, suele ser la suma cuadrado de los desv\'ios. Siendo $e_{i}$ el porcentajes de votos estimado para el candidato $i$, y $r_{i}$ el porcentaje real de votos obtenido, podemos definir el error del estimador como:
+A partir de una muestra cualquiera, es un hecho bien conocido que la frecuencia relativa de ocurrencia de un fen\'omeno es un estimador insesgado de su verdadera frecuencia relativa poblacional. A la hora de estimar porcentajes de votos, esto significa que de 100 personas 15 dicen votar a Fulano, lo m\'as probable es que el 15\% de la poblaci\'on vote a Fulano. Mucho menos trivial sin embargo, a la hora de evaluar el desempe\~o de una predicci\'on, es la medici\'on de su error.
+
+La primer f\'ormula que viene a la mente, aunque s\'olo sea por su ubicuidad, es la suma del cuadrado de los desv\'ios. Siendo $e_{i}$ el porcentaje de votos estimado para el candidato $i$, y $r_{i}$ el porcentaje real de votos obtenido, podemos definir el error del estimador como:
 
 $$ E(e|r) = \sum\limits_{i=0}^{n} (e_{i} - r_{i})^2 $$
 
-Un problema no trivial con ella, es que al incluir un cuadrado, las unidades en las que est\'a expresado el error no guardan ninguna relaci\'on directa con las unidades en la que est\'a expresada la predicci\'on: puntos porcentuales.
+Un problema no trivial con ella, es que al elevar al cuadrado, las unidades en las que est\'a expresado el error no guardan ninguna relaci\'on directa con las unidades en la que est\'a expresada la predicci\'on: puntos porcentuales.
 
-A su vez, aunque esta f\'ormula la hemos usado cientos de veces para medir la varianza de uan distribuci\'on en clases de Estad\'istica, siempre la utilizamos para medir la varianza de \emph{un} par\'ametro. Sin embargo, al estimar los porcentajes de votos para $c$ candidatos, estamos en efecto produciendo $c-1$ estimadores: uno para cada uno de los candidatos, salvo el \'ultimo que forzosamente dar\'a cien menos la suma de todos los dem\'as.
+A su vez, aunque esta f\'ormula la hemos usado cientos de veces para medir la varianza de una distribuci\'on en clases de Estad\'istica, siempre la utilizamos para medir la varianza de \emph{un} par\'ametro. Sin embargo, al estimar los porcentajes de votos para $c$ candidatos, estamos en efecto produciendo $c-1$ estimadores: uno para cada uno de los candidatos, salvo el \'ultimo que forzosamente dar\'a cien menos la suma de todos los dem\'as.
 
-Al entrar en territorio tan distinto al del estudio tradicional, no tenemos razones a priori para suponer que otras f\'ormulas de medici\'on del error de un estimador no son al menos tan buenas como \'esta. Una forma interesante de medir el error, por ejemplo, ser\'ia calculando por D'Hont cu\'antas bancas le corresponden a cada partido, y observando luego por cu\'antas bancas dicha predicci\'on difiere de la realidad.
-Para mantener el an\'alisis lo m\'as sencillo posible, en estre trabajo elegimos una f\'ormula similar a la original: la suma de los desv\'ios absolutos.
+Al entrar en territorio tan distinto al del estudio tradicional, no tenemos a priori razones para suponer que otras f\'ormulas de medici\'on del error de un estimador no son al menos tan buenas como \'esta. Una forma interesante de medir el error, por ejemplo, ser\'ia calculando por D'Hont cu\'antas bancas le corresponden a cada partido, y observando luego por cu\'antas bancas dicha predicci\'on difiere de la realidad.
+
+Para mantener el an\'alisis lo m\'as sencillo posible, en este trabajo elegimos una f\'ormula similar a la original: la suma de los desv\'ios absolutos.
 
 $$ E(e|r) = \sum\limits_{i=0}^{n} | e_{i} - r_{i} | $$
 
-Esta sencilla f\'ormula, tiene una gran ventaja a la hora de interpretar sus valores: est\'a en las mismas unidades que el estimador analizado. As\'i, representa de manera bastante sencilla "por cu\'anto le err\'o" la predicci\'on global al resultado real. Si dos candidatos obtuviesen el 30 y 70\% de los votos cada uno, y una estimaci\'on los pusiera en 35/65\%, su \emph{error absoluto} ser\'ia de 10 puntos. De hecho, 10\% es exactamente el porcentaje de los votos totales que l estimador predijo incorrectamente: un 5\% que supon\'iamos iba a votar al primer candidato y no lo hizo, y otro 5\% que cre\'imos no iba a votar al segundo, pero lo vot\'o.
+Esta sencilla f\'ormula, tiene una gran ventaja a la hora de interpretar sus valores: est\'a en las mismas unidades que el estimador analizado. As\'i, representa crudamente "por cu\'anto le err\'o" la predicci\'on global al resultado real. Si dos candidatos A y B obtuviesen el 30 y 70\% de los votos cada uno, y una estimaci\'on los pusiera en 35 y 65\%, su \emph{error absoluto} ser\'ia de 10 puntos. De hecho, 10\% es exactamente el porcentaje de los votos totales que el estimador predijo incorrectamente: un 5\% que supon\'iamos iba a votar a A y no lo hizo, y otro 5\% que cre\'iamos no iba a votar a B, pero lo vot\'o.
 
-Mas all\'a de la discusi\'on te\'orica, vale remarcar que la utilidad de estimar el error para nuestros prop\'ositos, no radica tanto en estimar el error en s\'i, sino en la obseraci\'on de su evoluci\'on: a medida que se reduce la variaci\'on del error, aumenta la estabilidad del pron\'ostico, y con ella la confianza que nosotros deber\'iamos tenerle.
+Mas all\'a de la discusi\'on te\'orica, vale remarcar que la utilidad de estimar el error para nuestros prop\'ositos, no radica tanto en estimar el error \emph{per se}, sino en la observaci\'on de su evoluci\'on: a medida que se reduce la variaci\'on del error, aumenta la estabilidad del pron\'ostico, y con ella la confianza que nosotros deber\'iamos tenerle.
 
 \subsection{?`Cu\'ando es hora de felicitar a los ganadores?}
 
-Obviamente es necesario esperar hasta el final de la elecci\'on para conocer el resultado exacto, y dada la particularidades del sistema D'Hont para asignar bancas, a veces diferencias porcentuales muy peque\~nas pueden mantener en vilo a los candidatos. Aunque no podamos estimar exactamente nunca este tipo de incertidumbres, s\'i podemos al menos intentar identificar tendencias. Veamos por ejemplo c\'omo les fue a los principales contendientes, UNEN y el PRO en nuestras mil simulaciones. Dirija Ud. lector su atenci\'on ahora al \textit{Gr\'afico I: \'Areas de incertidumbre para los porcentajes de votos obtenidos por UNEN y PRO}. (Si a\'un no est\'a leyendo este trabajo con los gr\'aficos al lado, es un buen momento para comenzar. Si no, todo el palabrer\'io le va a resultar muy confuso.)
+Obviamente es necesario esperar hasta el final de la elecci\'on para conocer el resultado exacto, y dada la particularidades del sistema D'Hont para asignar bancas, a veces diferencias porcentuales muy peque\~nas pueden mantener en vilo a los candidatos. Aunque no podamos estimar exactamente nunca este tipo de incertidumbres, s\'i podemos al menos intentar identificar tendencias. Veamos por ejemplo c\'omo les fue a los principales contendientes, UNEN y el PRO en nuestras mil simulaciones. Dirija Ud. lector su atenci\'on ahora al \textbf{Gr\'afico I: \'Areas de incertidumbre para los porcentajes de votos obtenidos por UNEN y PRO}. 
 
-En el eje x se encuentra representada la cantidad de mesas escrutadas en un momento dado en escala logar\'itmica: como cada nueva mesa agrega cada vez menos informaci\'on nueva al pron\'ostico, es de esperar que \'este mejore mucho y r\'apido al comienzo y poco y lento sobre el final. Si la escala fuese lineal, toda la informaci\'on \'util se comprimir\'ia casi sobre el eje de las y.
+(Si a\'un no est\'a leyendo este trabajo con los gr\'aficos al lado, es un buen momento para comenzar. Si no, todo el palabrer\'io le va a resultar muy confuso.)
 
-Las \'areas rojas y azules, representan respectivamente, el espacio donde se encuentran los votos de cada partido en el 90\% (con dos colas de 5\%, por debajo del percentil 5 y encima del percentil 50) de las simulaciones corridas, mientras que la l\'inea s\'olida intermedia es la mediana. Finalmente, las l\'ineas punteadas indican los resultados finales.
+En el eje x se encuentra representada la cantidad de mesas escrutadas en un momento dado en escala logar\'itmica: dadu que cada nueva mesa agrega progresivamente menos informaci\'on nueva al pron\'ostico, es de esperar que \'este mejore mucho y r\'apido al comienzo, y poco y lento sobre el final. Si la escala fuese lineal, toda la informaci\'on \'util se comprimir\'ia sobre el eje de las y.
+
+Las \'areas rojas y azules representan respectivamente, el espacio donde se encuentran los votos de UNEN y PRO en el 90\% (con dos colas de 5\%, por debajo del percentil 5 y encima del percentil 95) de las simulaciones corridas, mientras que la l\'inea s\'olida intermedia es la mediana. Finalmente, las l\'ineas punteadas indican los resultados finales.
 
 Esto quiere decir, por ejemplo, que con 100 mesas escrutadas, en el 90\% de los escrutinios simulados UNEN recib\'ia entre el 31\% y ~33,25\% de los votos. A esa misma altura, 90\% de las simulaciones (aunque no necesariamente \emph{las mismas} 90\%) pon\'ian al PRO con m\'as del 33,5\% y menos del 35,5\% de los votos.
 
-Con esos n\'umeros, ser\'ia m\'as que razonable concederle una futura victoria casi segura al PRO. De hecho, unas pocas mesas antes podemos identificar un hecho que nos permite contabilizar la probabilidad de esa tendencia: alrededor de las 85 mesas, se cruzan las curvas del percentil 5 del PRO con la del percentil 95 de UNEN. En otras palabras, a esa altura el 95\% de las simulaciones le daban \emph{al menos} ~33,3\% al PRO, y ese mismo 95\% le daba \emph{a lo sumo} un ~33.3\% a UNEN.
-El c\'alculo no es trivial, pero podemos aproximarlo pensando que los \'unicos casos en los que UNEN todav\'ia tiene chances con esos n\'umeros, es si estamos en el raro caso de que a su vez UNEN est\'e por encima de su percentil 95 (p95), y PRO por debajo de su percentil 5 (p05). Un r\'apido calculo estima esa probabilidad en $0.5^{2} = 0.0025$, o 400 a 1 en contra, asumiendo que ambos hechos son independientes entre s\'i (t\'engase en cuenta que todav\'ia no ha habido ni cerca de esa cantidad de elecciones nacionales en la historia del pa\'is).
+Con esos n\'umeros, ser\'ia m\'as que razonable concederle una futura victoria casi segura al PRO. De hecho, unas pocas mesas antes podemos identificar un hecho que nos permite contabilizar la probabilidad de esa tendencia: alrededor de las 85 mesas, se cruzan las curvas del percentil 5 del PRO con la del percentil 95 de UNEN. En otras palabras, a esa altura el 95\% de las simulaciones le daban \emph{al menos} ~33,3\% al PRO, y un 95\% le daba \emph{a lo sumo} un ~33.3\% a UNEN.
+El c\'alculo no es trivial, pero podemos aproximar las chances de ganar de UNEN pensando que los \'unicos casos en los que todav\'ia tiene chances con esos n\'umeros, es si a su vez UNEN est\'a por encima de su percentil 95, y PRO por debajo de su percentil 5. Un r\'apido c\'alculo estima esa probabilidad en $0.5^{2} = 0.0025$, o 400 a 1 en contra, asumiendo que ambos hechos son independientes entre s\'i (t\'engase en cuenta que todav\'ia no ha habido ni cerca de esa cantidad de elecciones nacionales en la historia del pa\'is).
 
-Obviamente, los votos por partido no son independientes entre s\'i, ya que a m\'as votos a un partido, menos para los dem\'as: cada voto para el PRO es un voto que no recibe UNEN, y por lo tanto sus posibilidades de aparecer como moment\'aneo ganador en el escrutinio cuando ya se han contabilizado al menos 85 mesas. Todo suena perfectamente plausible hasta aqu\'i, salvo por un peque\~no detalle: 85 mesas escrutadas esquivale a un mero 1,17\% de las 7256 mesas totales. No es rid\'iculamente temprano para afirmar tendencias en una elecci\'on tan re\~nida? La respuesta, es s\'i pero no tanto.
+Obviamente, los votos por partido no son independientes entre s\'i, ya que a m\'as votos a un partido, menos para los dem\'as: cada voto para el PRO es un voto que no recibe UNEN, disminuyendo sus posibilidades de aparecer como moment\'aneo ganador en el escrutinio cuando ya se han contabilizado al menos 85 mesas. Todo suena perfectamente plausible hasta aqu\'i, salvo por un peque\~no detalle: 85 mesas escrutadas esquivale a un mero 1,17\% de las 7256 totales. No es rid\'iculamente temprano para afirmar tendencias en una elecci\'on tan re\~nida? La respuesta, es s\'i pero no tanto.
 
-1,17\% de las mesas escrutadas es un n\'umero muy peque\~no, pero no debemos olvidar los supuestos de los que partimos: al suponer \emph{perfectamente} aleatorio el orden del escrutinio, eliminamos la muy real posibilidad de que los votos vengan "de a tandas". Mapeos de estos mismos resultados electorales han mostrado que en general UNEN fue ganador claro en el centro de la ciudad, el PRO en el corredor norte y algunos reductos del sur fueron para el FPV. Si por alguna raz\'on, los votos de una misma comuna o secciones adyacentes se cargasen m\'as o menos seguidos, deber\'iamos esperar mucho m\'as ruido y variaci\'on en las tendencias iniciales.
+1,17\% de las mesas escrutadas es un n\'umero muy peque\~no, pero no debemos olvidar los supuestos de los que partimos: al suponer \emph{perfectamente} aleatorio el orden del escrutinio, eliminamos la muy real posibilidad de que los votos vengan "de a tandas". Mapeos de estos mismos resultados electorales han mostrado que en general UNEN fue ganador claro en el centro de la ciudad, el PRO en el corredor norte, y algunos reductos del sur fueron para el FPV. Si por alguna raz\'on, los votos de una misma comuna o secciones adyacentes se cargasen m\'as o menos seguidos, deber\'iamos esperar mucho m\'as ruido y variaci\'on en las tendencias iniciales.
 
-Una forma de medir emp\'iricamente c\'uanto m\'as lenta es la convergencia hacia los resultados reales en la realidad, es recurriendo al archivo. La noche del escrutinio, cuando el ministro Randazzo anunci\'o por primera vez los resutlados provisorios, despu\'es de la tradicional admonici\'o sobre c\'omo \'estos pueden variar durante la noche, dio los siguientes n\'umeros: con el 9,87\% de las mesas escrutadas, PRO 34,15\%, UNEN 29,95\%, FPV 24,19\%
+Una forma de medir emp\'iricamente c\'uanto m\'as lenta es la convergencia hacia los resultados finales en la realidad que en nuestro modelo, es recurriendo al archivo. La noche del escrutinio, cuando el ministro Randazzo anunci\'o por primera vez los resultados provisorios, despu\'es de la tradicional admonici\'o sobre c\'omo \'estos pueden variar durante la noche, dio los siguientes n\'umeros: 9,87\% de las mesas escrutadas, PRO 34,15\%, UNEN 29,95\%, FPV 24,19\%
 
-En nuestras simulaciones, a las 700 mesas escrutadas (9,64\%), el 95\% de los casos UNEN ten\'ia m\'as del 31,75\% de los votos, y el 95\% de ocasiones el PRO recib\'ia \emph{al menos}el resultado anunciado por el ministro. Claramente nuestro modelo y la realidad tienen grandes diferencias.
+En nuestras simulaciones, a las 700 mesas escrutadas (9,64\%), en el 95\% de los casos UNEN ten\'ia m\'as del 31,75\% de los votos, y el 95\% de las ocasiones el PRO recib\'ia \emph{al menos} el resultado anunciado por el ministro. Claramente nuestro modelo y la realidad tienen grandes diferencias. Podemos concluir con seguridad que el orden de carga de los telegramas est\'a lejos de ser perfectamente aleatorio.
 
-Una forma de considerar esta correlaci\'on en el orden de carga de las mesas, en el futuro, podr\'ia ser aleatorizar "a medias": si se acaba de carga la mesa $x$, la pr\'oxima mesa en cargarse sera elegida al azar la mitad de las veces, y la otra mitad ser\'a la $n+1$, que casi siempre esta ggeogr\'aficamente muy cerca.
+Una forma de considerar esta correlaci\'on en el orden de carga de las mesas, en el futuro, podr\'ia ser aleatorizar "a medias": si se acaba de carga la mesa $x$, la pr\'oxima mesa en cargarse sera elegida al azar la mitad de las veces, y la otra mitad ser\'a la $n+1$, que casi siempre esta geogr\'aficamente muy cerca.
 
-Todav\'ia nos queda por resolver sin embargo cu\'al es la verdadera causa de la divergencia entre la simulaciones y la realidad. Los resultados generados puede ser notorios porque 85 mesas parecen ser muy pocas mesas, pero si recordamos que cada mesa tiene unos 250 votos afirmativos, estamos hablando de una muestra de m\'as de 21.000 votos, n\'umero que hace babear a cualquier soci\'ologo. El modelo no inventa los resultados, pero hay algo de la realidad que no "caza". Lamentablemente, hay pr\'acticamente infinitas explicaciones posibles, desde que el centro de c\'omputos decida cargar los telegramas por circuito o comuna para mantener un orden, pasando porque los fiscales de los barrios c\'entricos son m\'as lentos que sus contrapartes de barrios con m\'as votos al FPV, hasta la m\'as perniciosas, donde expl\'icitamente se cargan primero ciertos circuitos para disminuir la diferencia parcial entre el FPV y los dos primeros (aunque en el anuncio de Randazzo UNEN le lleva menos de 5 puntos al FPV, finalmente la diferencia fue de m\'as de 11). Lo \'unico que podemos decir con seguridad, es que el orden del escrutinio evidentemente est\'a lejos de ser perfectamente aleatorio, y por lo tanto las tendencias se formar\'an m\'as -bastante m\'as - lentamente que en nuestro modelo.
+Todav\'ia nos queda por resolver sin embargo cu\'al es la verdadera causa de la divergencia entre la simulaciones y la realidad. Los resultados generados pueden resultar antiintuitivos porque 85 mesas parecen ser muy pocas mesas, pero si recordamos que cada mesa tiene unos 250 votos, estamos hablando de una muestra de m\'as de 21.000 votos, n\'umero que hace babear a cualquier soci\'ologo. El modelo no inventa los resultados, pero hay algo de la realidad que no "caza". 
+
+Lamentablemente, hay pr\'acticamente infinitas explicaciones posibles, desde que el centro de c\'omputos decida cargar los telegramas por circuito o comuna para mantener un orden, pasando por que los fiscales de los barrios c\'entricos son m\'as lentos que sus contrapartes de barrios sure\~nos, hasta la m\'as perniciosas, donde expl\'icitamente se cargan primero ciertos circuitos para disminuir la diferencia parcial entre el partido oficialista y los dos primeros (aunque en el anuncio de Randazzo UNEN le lleva menos de 5 puntos al FPV, finalmente la diferencia fue de m\'as de 11). Lo \'unico que podemos decir con seguridad, es que el orden del escrutinio evidentemente est\'a lejos de ser perfectamente aleatorio, y por lo tanto las tendencias se formar\'an m\'as -bastante m\'as - lentamente que en nuestro modelo.
 
 \subsection{A falta de confianza, estabilidad}
 
-Supongamos que uno fuese candidato a diputado en estas elecciones, y con el 50\% de las mesas escrutadas tenemos el 11\% de los votos, porcentaje que nos alcanza para obtener una banca en el Congreso. Sabiendo que si ese n\'umero baja del 10\%, nos quedamos afuera. ?`Qu\'e confianza deber\'iamos tener en terminar por arriba el 10\%?
-La respuesta honesta a dicha pregunta deber\'ia ser un rotundo "ni idea". Todo depende de que se hayan cargado o no las mesas m\'as favorables a nosotros, cosa que s\'olo podemos distinguir si a la vez revisamos constantemente la p\'agina de resultados provisorios \emph{y} sabemos con exactitud cu\'ales son esos barrios favorables.
-Una tarea un poco m\'as sencilla que la de estimar la confianza que debemos tener en el resutlado parcial, es la de estimar su estabilidad: mucho m\'as probable es que terminemos por encima del 10\% si venimos por encima "hace muchas mesas" que si reci\'en lo cruzamos con un salto fortuito. As\'i considerado, podemos aproximar una respuesta a este problema observando la \emph{variaci\'on temporal del error absoluto}. El Gr\'afico II: Variaci\'on del Error Absoluto en funci\'on de las mesas escrutadas, intenta representar esta idea.
+Supongamos que uno fuese candidato a diputado en estas elecciones, y con el 50\% de las mesas escrutadas tenemos el 11\% de los votos, porcentaje que nos alcanza para obtener una banca en el Congreso. Sabiendo que si ese n\'umero baja del 10\%, nos quedamos afuera, ?`qu\'e confianza deber\'iamos tener en terminar por arriba el 10\%?
+La respuesta honesta a dicha pregunta deber\'ia ser un rotundo "ni idea". Todo depende de que se hayan cargado o no las mesas m\'as favorables a nuestra causa, cosa que s\'olo podemos distinguir si a la vez revisamos constantemente la p\'agina de resultados provisorios \emph{y} sabemos con exactitud cu\'ales son esos los circuitos en que mejor nos va.
 
-Los primer\'isimos momentos del escrutinio son decididamente ca\'oticos, como se puede observar en el gr\'afico. Aunque el eje y est\'a cortado en (-10,10) para optimizar el espacio disponible se observa que buena parte de los resutlados parciales con 1, 2 o 3 mesas le erran al final por mucho m\'as de 10 puntos. Ya con 10 mesas escrutadas (siempre manteniendo el supuesto de perfecta aleatoridad en el orden del escrutinio), son muy pocas las ocasiones en las que una mesa puede mover el resultado parcial m\'as de 5 puntos. Y antes de las 70, en ninguna de las 200 corridas del simulador graficadas una mesa pudo mover el resultado un punto entero.
+Una tarea un poco m\'as sencilla que la de estimar la confianza que debemos tener en el resultado parcial, es la de estimar su estabilidad: mucho m\'as probable es que terminemos por encima del 10\% si venimos por encima "hace muchas mesas" que si reci\'en lo cruzamos con un salto fortuito. As\'i considerado, podemos aproximar una respuesta a este problema observando la \emph{variaci\'on temporal del error absoluto}. El \textbf{Gr\'afico II: Variaci\'on del Error Absoluto en funci\'on de las mesas escrutadas, 200 simulaciones}, intenta representar esta idea.
 
-La raz\'on por la que esto pasa es doble. Obviamente, cada nueva mesa que se suma 'diluye' el peso de todas las anteriores y el suyo propio un poco m\'as, por lo cual necesariamente su impacto ser\'a menor. Para compensar por ello es que se ha dibujado uan vez m\'as el eje x en escala logar\'itmica. Sim embargo, tambi\'en act\'ua fuertemente una vez m\'as aqu\'i la tan mentada perfecta aleatoriedad. A\'un si existen diferencias geogr\'aficas en los patrones de votos, 70 mesas tomadas aleatoriamente alcanzan con creces para tener datos de todos los grandes barrios. En consecuencia, las diferencias geogr\'aficas ya se habr\'an licuado, y por m\'as espectacular que sea el resutlado de una mesa, al promediarla con un pastiche general, su particularidad desaparece del todo.
+Los primer\'isimos momentos del escrutinio son decididamente ca\'oticos, como se puede observar en el gr\'afico. Aunque el eje y est\'a cortado en (-10,10) para optimizar el espacio disponible se observa que buena parte de los resultados parciales con 1, 2 o 3 mesas le erran al final por mucho m\'as de 10 puntos. Ya con 10 mesas escrutadas (siempre manteniendo el supuesto de perfecta aleatoridad en el orden del escrutinio), son muy pocas las ocasiones en las que una mesa puede mover el resultado parcial m\'as de 5 puntos. Y pasadas las 70, en ninguna de las 200 corridas del simulador graficadas una mesa pudo mover el resultado un punto entero.
+
+La raz\'on por la que esto pasa es doble. Obviamente, cada nueva mesa que se suma 'diluye' el peso de todas las anteriores y el suyo propio un poco m\'as, por lo cual necesariamente su impacto ser\'a menor. Para compensar por ello es que se ha dibujado uan vez m\'as el eje x en escala logar\'itmica. En adici\'on, tambi\'en act\'ua aqu\'i la tan mentada perfecta aleatoriedad. A\'un si existen diferencias geogr\'aficas en los patrones de votos, 70 mesas tomadas aleatoriamente alcanzan con creces para tener datos de todos los grandes barrios. En consecuencia, las diferencias geogr\'aficas ya se habr\'an licuado, y por m\'as espectacular que sea el resultado de una mesa, al promediarla con un pastiche general, su particularidad desaparece del todo.
 
 Si recordamos que describimos al error absoluto de un pron\'ostico como el total de puntos porcentuales por los que la estimaci\'on en consideraci\'on est\'a errada,  la utilidad de analizar la estabilidad de su evoluci\'on resulta transparente: el hecho que nos preocupaba era perder 1 punto porcentual de votos, lo cual ser\'a casi perfectamente seguro si el error absoluto a\'un var\'ia de a 10 puntos, posible si var\'ia de a 1 punto, poco probable si no salta de a m\'as de 1 d\'ecima, y casi imposible si la variaci\'on est\'a en las cent\'esimas. Este tipo de predicciones cualitativas est\'a lejos de ser perfecta, pero gracias a que considera situaciones distintas entre s\'i por \'ordenes enteros de magnitud, sus resultados son \'utiles a\'un en su imprecisi\'on.
 
-En el Gr\'afico 3: Cantidad de mesas en las que se estabiliza la variaci\'on del error absoluto, se puede observar esquem\'aticamente esta idea. Su lectura es bastante sencilla a pesar de que pueda parecer intimidante. La l\'inea violeta por ejemplo, marca a partir de qu\'e mesa una la variaci\'on del error en una simulaci\'on es siempre menor a 10. Por todo lo dicho anteriormente, no es sorprendente que case 950 de las 1000 simulaciones ya no peguen saltos de tal magnitud con una \'unica mesa cargada, y ninguna en menos de 4. 
+En el \textbf{Gr\'afico 3: Cantidad de mesas en las que se estabiliza la variaci\'on del error absoluto}, se puede observar esquem\'aticamente esta idea. Su lectura es bastante sencilla a pesar de que pueda parecer intimidante. La l\'inea violeta por ejemplo, marca a partir de qu\'e mesa la variaci\'on del error en una simulaci\'on es siempre menor a 10. Por todo lo dicho anteriormente, no es sorprendente que casi 950 de las 1000 simulaciones ya no peguen saltos de tal magnitud con una \'unica mesa cargada, y ninguna pasadas las 4. 
 
 Si en vez de seguir las curvas nos concentramos en las frecuencias acumuladas del eje y, podemos estimar ciertas probabilidades, independientemente de en qu\'e simulaci\'on particular transcurra nuestro escenario de moment\'anea victoria. Observando por ejemplo la interseccio de $y=980$ con las curvas de niveles, podemos deducir que en el 98\% de las simulaciones, la varicion del error se volvi\'o permanentemente menor a 1 en las primeras cincuenta mesas. De manera similar, se puede inferir del gr\'afico que en un ~88\% de los casos, pasadas las 500 mesas el error ya no var\'ia m\'as que de a d\'ecimas. Para resolver nuestro dilema original, nos basta sencillamente con ubicarnos en el gr\'afico, y deducir las posibilidades.
 
@@ -338,11 +349,12 @@ Dado que planteamos que hab\'ian sido escrutadas la mitad de las mesas (unas 360
 
 Hasta el momento, tratamos \'unicamente las simulaciones del escrutinio. Nuestro principal problema, al tratar de comparar los resultados con la experiencia pr\'actica, fue provocado por un supuesto particularmente fuerte, el de perfecta aleatoriedad en el orden de c\'omputo. Este supuesto provoc\'o que los resultados obtenidos converjan hacia los valores reales mucho m\'as r\'apido de lo que lo hacen en la vida real: nuestro modelo estimaba el resultado final tanto mejor que lo emp\'iricamente posible que compararlos fue un tanto infructuoso.
 
-Hay un \'ambito, sim embargo, donde este tipo de simulaciones puede tener una utilidad pr\'actica bastante directa, sin embargo: el an\'alisis del error muestral en las encuestas previas a la elecci\'on.
+Hay un \'ambito, sim embargo, donde este tipo de simulaciones puede tener una utilidad pr\'actica bastante directa: el an\'alisis del error muestral en las encuestas previas a la elecci\'on.
 
-Un generador de muestras geogr\'aficamente representativas, que adem\'as es perfectamente riguroso en la elecci\'on al azar de encuestados (como podemos serlo al aleatoriamente los votos que incluimos en cada muestra), tendr\'a utilidad \emph{negativa}. No nos sirve para saber cu\'al es el error asociado a la muestra tomada en una cierta encuesta, pero s\'i nos permitir\'a dilucidar si dada una cierta muestra, el error que se le imputa es factible o la predicci\'on es demasiado "confianzuda".
+Un generador de muestras geogr\'aficamente representativas, que adem\'as es perfectamente riguroso en la elecci\'on al azar de encuestados al interior de cada agregado, tendr\'a utilidad \emph{negativa}. No nos sirve para saber cu\'al es el error asociado a la muestra tomada en una cierta encuesta, pero s\'i nos permitir\'a dilucidar si dada una cierta muestra, el error que se le imputa es factible o la predicci\'on es demasiado "confianzuda".
 
 Una lista con todas las razones por las cuales a\'un la mejor muestra aleatoria en el mundo real es fundamentalmente menos aleatoria de lo que creemos ser har\'ia larga, pero podemos mencionar algunas claves.
+
 En primer lugar, la muestra se toma muchos d\'ias antes de la elecci\'on, tiempo en el cual los votantes a\'un pueden cambiar de opini\'on. Adem\'as, la mayor\'ia de las encuestas no se realizan en un \'unico d\'ia, sino que pueden cubrir tanto como una semana laboral entera, y los resultados que de ella se deriven no se podr\'an asociar con ning\'un momento particular del intervalo de tiempo.
 
 Los medios a trav\'es de los cuales se realizan las encuestas tambi\'en tienen su n\'umero de falencias. Sea que la encuesta se realice en persona en la calle o por tel\'efono, la participaci\'on es casi siempre voluntaria, y por enden habr\'a un sesgo de selecci\'on inherente en los participantes que s\'i la contestan.
@@ -351,90 +363,97 @@ A veces, las encuestas telef\'onicas ni siquieran son realizadas por una persona
 
 La calidad de la representatividad geogr\'afica es una de las pocas cosas en las que una encuesta telef\'onica puede llegar a ser mejor que una en persona, ya que los tel\'efonos fijos por definici\'o no se mueven mucho - aunque casi nadie los atiende, tampoco.
 
-Cuando la encuesta se realiza en la calle, se suele recortar trabajo utilizando "puntos muestra": se realizan varias encuestas en el radio de unas pocas cuadras, y esos resultados representan a todo el barrio. Habiendo militado en un partido pol\'itico durante las elecciones presidenciales del 2011, tuve la oportunidad de realizar varias de estas encuestas, y s\'e por experiencia propia que unir barios puntos muestra en uno, acomodar los puntajes de nivel socioecon\'omico para entregar ese ciudadano de clase media-alta que estaba faltando, y otras tantas peque\~nas alteraciones son moneda corriente.
+Cuando la encuesta se realiza en la calle, se suele recortar trabajo utilizando "puntos muestra": se realizan varias encuestas en el radio de unas pocas cuadras, y esos resultados se extrapolan luego a todo el barrio. Habiendo militado en un partido pol\'itico durante las elecciones presidenciales del 2011, tuve la oportunidad de realizar varias de estas encuestas, y s\'e por experiencia propia que unir varios puntos muestra en uno, "acomodar" ligeramente los puntajes de nivel socioecon\'omico para cumplir con la cuota de ciudadanos de clase media-alta exigdida, y otras tantas peque\~nas alteraciones son moneda corriente. Cuando adem\'as el trabajo es pago en lugar de voluntario, los incentivos para alterar respuestas son todav\'ia mayores.
 
-La idea entonces, ser\'a pensar nuestro "simulador de muestras" como el ideal plat\'onico de la muestra aleatoria: muestras "reales" nunca podr\'an ser tan buenas como las que construyamos, pero estas \'ultimas pueden servir como vara para medir el desempe\~no relativo de las primeras.
+La idea entonces, ser\'a pensar nuestro "simulador de muestras" como el ideal plat\'onico de la muestra poliet\'apica (primero estratificada, y luego aleatoria): muestras "reales" nunca podr\'an ser tan buenas como las que construyamos, pero estas \'ultimas pueden servir como vara para medir el desempe\~no relativo de las primeras.
 
-Veamos en el Gr\'afico IV, c\'omo se distribuye el error absoluto para muestras de tama\~no 100, 500, 2000 y 10.000. 100 es un $n$ irrisorio para ciudades del tama\~no de Capital Federal, y 10.000 es un n\'umero lo suficientemente grande como para que casi nunca se hagan encuestas de ese tama\~no. Como referencia, se consideran tambi\'en 500, un $n$ superior a los tradicionalmetne usados en encuestas electorales presenciales en Capital Federal, y 2.000 es un n\'umero t\'ipico para consultas telef\'onicas. 
+Veamos en el \textbf{Gr\'afico IV}, c\'omo se distribuye el \textbf{error absoluto para muestras de tama\~no 100, 500, 2000 y 10.000}. 100 es un $n$ irrisorio para ciudades del tama\~no de Capital Federal, y 10.000 es un n\'umero lo suficientemente grande como para que casi nunca se hagan encuestas de ese tama\~no. Como referencia, se consideran tambi\'en 500, un $n$ superior a los tradicionalmetne usados en encuestas electorales presenciales en Capital Federal, y 2.000, un $n$ t\'ipico para sondeos telef\'onicos. 
 
 Aunque parezcan n\'umeros peque\~nos (?`c\'omo podemos inferir los patrones de votaci\'on de 1.800.000 personas de s\'olo 500 de ellas?), en la pr\a'ctica son muy usados, y hasta recuerdo que los menores $n$ que se consideraban para realizar una encuesta a nivel nacional (en buena parte por su costo), comenzaban en 1.200 personas.
 
-Como todos los gr\'aficos hasta ahora, el Gr\'afico IV no es la excepci\'on, y en el eje x se utiliz\'o una escala logar\'itmica. De lo contrario, no podr\'iamos observar juntos los tamanos del error para muestras tan dispares. En este an\'alisis, a diferencia del anterior, trataremos directamente con los valores del error absoluto y no su variaci\'on, concepto que no tiene sentido en una muestra est\'atica.
+Como todos los gr\'aficos hasta ahora, el Gr\'afico IV no es la excepci\'on, y en el eje x se utiliz\'o una escala logar\'itmica. De lo contrario, no podr\'iamos observar juntos los tamanos del error para muestras con $n$ tan dispares. En este an\'alisis, a diferencia del anterior, trataremos directamente con los valores del error absoluto y no su variaci\'on, concepto que no tiene sentido en una muestra est\'atica.
 
-Si nos enfocamos en la curva roja, que representa los errores observados en 10.000 muestras de $n=100$, podemos inferir que una meustra de este tama\~no tien un poder predictivo realmente bajo. En 9.000 casos (90\%), el error observado estuvo por encima de 9 puntos (cosa que determinamos observando donde $y=1.000$ corta a la curva de $n=100$), y en el peor 20\% de los casos, super\'o los 20 puntos. En otras palabras, una muestra tan peque\~na es una loter\'ia.
-Para el observador casual, sin embargo, una muestra de 100 personas puede llegar a parecer significativa: es m\'as cantidad de gente de la que ninguna persona va a consultar voluntariamente para hacerse a una idea de la prevalencia de un fen\'omeno (el voto a tal o cual partido, por ejemplo). 
+Si nos enfocamos en la curva roja, que representa los errores observados en 10.000 muestras de $n=100$, podemos inferir que una muestra de este tama\~no tiene un poder predictivo realmente bajo. En 9.000 casos (90\%), el error observado estuvo por encima de 9 puntos (cosa que determinamos observando donde $y=1.000$ corta a la curva de $n=100$), y en el peor 20\% de los casos, super\'o los 20 puntos. En otras palabras, una muestra tan peque\~na es una loter\'ia.
+El observador casual, sin embargo, puede llegar a derivar conclusiones significativa a\'un con $n=100$: por cuestiones culturales probablemente, "100" es algo as\'i como el "primer n\'umero grande" que conocemos, y no somos buenos para distinguir "n\'umeros grandes" entre s\'i. 
 
-En el otro extremo, tenemos las muestras de $n=10.000$, que resultaron muy precisas. En el 20\% de los casos su error absoluto no supera la unidad, el 80\% no supera los dos puntos, y en ninguna de las diez mil simulaciones el error absoluto fue mayor a 4. En general, podemos decir que si alguien produjiese una encuesta electoral con $n=10.000$ y tuviese infinito cuidado de evitar en todo lo posible caer en los problemas antes mencionados, esa s\'i que ser\'ia una estimaci\'on confiable.
+En el otro extremo, tenemos las muestras de $n=10.000$, que resultaron muy precisas. En el 20\% de los casos su error absoluto no supera la unidad, el 80\% no supera los dos puntos, y en ninguna de las diez mil simulaciones el error absoluto fue mayor a 4. En general, podemos decir que si alguien produjiese una encuesta electoral con $n=10.000$ y tuviese infinito cuidado de evitar caer en los problemas antes mencionados, esa s\'i que ser\'ia una estimaci\'on confiable.
 
 La vida real, para variar, no ocurre en ninguno de los dos extremos, sino en un gris intermedio. Es por ello que vale la pena analizar los casos $n=2.000$ y $n=500$. Para $n=500$, el 95\% de las muestras tuverion un error absoluto de 11,64 o menos, mientras que para $n=2.000$ el percentil 95 est\'a en 5,81 puntos de error absoluto. Puesto en otras palabras, alrededor de 1 de cada 20 muestras con $n=500$ yerran el resultado final por m\'as de 11 puntos, y 1 de cada 20 muestras con $n=2.000$, yerran por casi 6 unidades. Ninguno de los resultados es demasiado alentador.
 
-Otra forma de representar estos mismos datos, que nos permite analizar m\'as directamente el famoso "intervalo de confianza" de un estimador, est\'a en el Gr\'afico V: Percentiles seleccionados para el error absoluto de una muestra en funci\'on de su tama\~no.
-La utilidad de este gr\'afico reside en el simple hecho de que para cada $n$, entre dos bandas de un mismo color encontraremos distintos intervalos de confianza a dos colas: al 98\% entre las rectas rojas, 90\% entre las azules, y 80\% entre las violetas. La recta verde marca la mediana: una simulaci\'on al azar tiene las mismas chances de tener un error mayor a la mediana (50\%) o menor a ella (el otro 50\%).
+Otra forma de representar estos mismos datos, que nos permite analizar m\'as directamente el famoso "intervalo de confianza" de un estimador, est\'a en el \textbf{Gr\'afico V: Percentiles seleccionados para el error absoluto de una muestra en funci\'on de su tama\~no}.
 
-En esta \'ultima representaci\'on, adem\'as del eje, tambi\'en la escala en el eje y es logar\'itmica. Llamativamente, los percentiles que delimitan los intervalos de confianza para distintos tama\~os de muestra forman l\'ineas rectas al ser graficadas en esta escala, lo cual indica est\'a indicando que un mismo aumento porcentual del tama\~no muestral implicar\'a siempre una misma reducci\'on porcentual del error de la muestra, independientemente del $n$ del que se arranque y el nivel de confianza que se desee (pues todas las rectas representando percentiles son esencialmente paralelas.
+La utilidad de este gr\'afico reside en el hecho de que para cada $n$, entre dos bandas de un mismo color encontraremos distintos intervalos de confianza a dos colas: al 98\% entre las rectas rojas, 90\% entre las azules, y 80\% entre las violetas. La recta verde marca la mediana: una simulaci\'on al azar tiene las mismas chances de tener un error mayor a la mediana (50\%) o menor a ella (el otro 50\%).
+
+En esta \'ultima representaci\'on, adem\'as de en el eje x, tambi\'en la escala en el eje y es logar\'itmica. Llamativamente, los percentiles que delimitan los intervalos de confianza para distintos tama\~os de muestra forman l\'ineas rectas al ser graficadas de esta forma, lo cual est\'a indicando que un mismo aumento porcentual del tama\~no muestral implicar\'a siempre una misma reducci\'on porcentual del error de la muestra, independientemente del $n$ del que se arranque y el nivel de confianza que se desee (pues todas las rectas representando percentiles son esencialmente paralelas).
 
 Si aproximamos las variaciones porcentuales sobre la curva de la mediana, observamos que 
 
 $$ \frac{ErrAbs(muestra| n= 1.000)}{ErrAbs(muestra| n= 100)} = \frac{4,639}{15,513} = 0,299 $$
 $$ \frac{ErrAbs(muestra| n= 10.000)}{ErrAbs(muestra| n= 1.000)} = \frac{1,462}{4,639} = 0,315 $$
 
-Podemos concluir entonces que a grandes rasgos, multiplicar por 10 (o aumentar en un 900\%) el tama\~no muestral, disminuir\'a el error absoluto de la muestra en un 70\%. Este intercambio no es el m\'as favorable en t\'erminos de costo-beneficio, y puede explicar en buena parte por qu\'e muchas veces los $n$ considerados en distintos experimentos y encuestas son muy inferiores a los que el margen de error tolerable implicar\'ia.
+Podemos concluir entonces que a grandes rasgos, multiplicar por 10 (o aumentar en un 900\%) el tama\~no muestral, disminuir\'a el error absoluto de la muestra en un 70\%. Este intercambio no es el m\'as favorable en t\'erminos de costo-beneficio, y puede explicar en buena parte por qu\'e muchas veces los $n$ considerados en distintos experimentos y encuestas son muy inferiores a los que el margen de error declarado precisar\'ia.
 
-?`Se puede observar este efecto en la pr\'actica? Para comprobarlo, intentaremos poner en contexto algunas predicciones hechas en el mundo real.
-
-A pesar de que su principal trabajo es predecir el futuro, rara vez encontramos una evaluaci\'on de desempe\~no de los vaticinios de las consultoras profesionales. Con este gr\'afico sin embargo, podemos hacer algunas pruebas caseras.
+?`Se puede observar este efecto en la pr\'actica? Para comprobarlo, intentaremos poner en contexto algunas predicciones hechas en el mundo real. A pesar de que su principal trabajo es predecir el futuro, rara vez encontramos una evaluaci\'on de desempe\~no de los vaticinios de las consultoras profesionales. Con este gr\'afico, podemos hacer algunas pruebas caseras.
 
 \subsection{Caso de estudio: Poliarqu\'ia, La Naci\'on 6-Oct-2013}
 
-Revisando los archivos de los principales diarios, es f\'acil encontrarse con numerosas historias que reportan sobre encuestas realizadas en plena campa\~na electoral. Tomaremos como ejemplo una de las encuestas m\'as prominentes en esas semanas, realizada por Poliearqu\'ia unos 20 d\'ias antes de la elecci\'on. La encuesta en cuesti\'on, contiene un 8,7\% de "No Sabe/Indeciso", y los porcentajes para los seis candidatos est\'an lejos de sumar 100\%. No intentaremos entonces calcular su error absoluto, pero s\'i estudiar c\'omo se describe a s\'i misma y su margen de error. En el rinc\'on inferior derecho del comunicado de prensa, se lee:
+Revisando los archivos de los principales diarios, es f\'acil encontrarse con numerosas historias que reportan sobre encuestas realizadas en plena campa\~na electoral. Tomaremos como ejemplo una de las encuestas m\'as prominentes en esas semanas, publicada en La Naci\'on y realizada Poliarqu\'ia 21 d\'ias antes de la elecci\'on. La encuesta en cuesti\'on, contiene un 8,7\% de "No Sabe/Indeciso", y por ende los porcentajes para los seis candidatos est\'an lejos de sumar 100\%. No intentaremos entonces calcular su error absoluto, pero s\'i estudiar c\'omo se describe a s\'i misma y su margen de error. En el rinc\'on inferior derecho del comunicado de prensa, se lee:
 
 ``Universo: poblaci\'on mayor de 18 a\~nos, residente en la ciudad de Buenos Aires, en condiciones de votar en las pr\'oximas elecciones. Tipo de encuesta: telef\'onica por sistema CATI e IVR. Caracter\'isticas de la muestra: aleatoria, poliet\'apica, estratificada por zonas para la selecci\'on de las caracter\'isticas y n\'umeros telef\'onicos, y por cuotas de edad y sexo para la selecci\'on del entrevistado. Tama\~no total de la mestra: 2380 casos. \emph{Error estad\'istico: +/- 2,05 para un nivel de confianza del 95\%}. Fecha del trabajo de campo: del 2 al 4 de octubre de 2013.''
 
-La \'unica cosa que esta encuesta realiza que nuestro modelo no toma en cuenta(simplemente porque el voto es an\'onimo) es la segmentaci\'on por sexo y edad. Al ser telef\'onica, ya podemos imaginar que la calidad de la informaci\'on obtenida sera muy inferior a la de nuestro simulador, que posee los resultados oficiales por mesa.
-Lo que realmente nos interesa, son dos datos. Primero, que el $n=2.380$, y segundo, que el sumamente vago ``error estad\'istico'' es de +/- 2,05 al 95\% de confianza.
+La \'unica cosa que esta encuesta realiza que nuestro modelo no toma en cuenta(simplemente porque el voto es an\'onimo) es la segmentaci\'on por sexo y edad. Al ser telef\'onica, ya podemos imaginar que la calidad de la informaci\'on obtenida sera muy inferior a la de nuestro simulador, que posee los resultados oficiales por mesa. Lo que realmente nos interesa, son dos datos. Primero, que $n=2.380$, y segundo, el sumamente vago ``error estad\'istico'' de +/- 2,05 al 95\% de confianza.
 
-Se puede sobreentender que con "error estad\'istico" se hace referencial al error muestral, causado por observar una muestra en lugar de la poblaci\'on entera. Este error es b\'asicamente el \'unico que realmente puede afectar a nuestra simulaciones. EL problema para coparar la encuesta con lo expuesto hasta ahora, es que el error de +/- 2,05 es reportado \emph{sin ninguna menci\'on} de las unidades en que se expresa, ni si representa el margen de error de cada predicci\'on indiviual o el margen de error colectivo.
+Se puede sobreentender que por "error estad\'istico" se hace referencial al error muestral, causado por observar una muestra en lugar de la poblaci\'on entera. Este error es b\'asicamente el \'unico que realmente puede afectar a nuestra simulaciones. EL problema para comparar la encuesta con lo expuesto hasta ahora, es que el error de +/- 2,05 es reportado \emph{sin ninguna menci\'on} de las unidades en que se expresa, ni si representa el margen de error de cada predicci\'on indiviual o el margen de error colectivo.
 
-Del Gr\'afico 5, podemos establecer que el 95\% de las muestras aleatorias de aproximadamente el mismo tama\~no tuvieron a lo sumo 5 puntos de error. Si el +/-2,05 de Poliarqu\'ia se refiere a un \'unico candidato, est\'a siendo extremadamente optimista: !` la \emph{mitad} de las muestras con $n=2.500$ en nuestra simulaciones tienen \emph{al menos} 3 puntos de error!
+Del Gr\'afico 5, podemos establecer que el 95\% de las muestras aleatorias de aproximadamente el mismo tama\~no tuvieron a lo sumo 5 puntos de error. Si el +/-2,05 de Poliarqu\'ia se refiere a un \'unico candidato, est\'a siendo ingenuamente optimista: !` la \emph{mitad} de las muestras con $n=2.500$ en nuestra simulaciones tienen \emph{al menos} 3 puntos de error!
 
-Si el +/-2,05 se refiere a cada candidato, la situaci\'on podr\'ia llegar a ser plausible. En nuestras simulaciones, el 99\% de las iteraciones devolvieron un error muestral menor a 6,14 para $n=2.500$, n\'umero que est\'a m\'as en l\'inea con lo reportado por Poliarqu\'ia. Sin embargo, no queda claro qu\'e representa dicho intervalo en casos como los de CP, cuyos votos la encuesta pone en 1,6\% (?`!`o sea que puede sacar entre -0,45 y 3,65\%!?) 
+Si el +/-2,05 se refiere a cada candidato, la situaci\'on podr\'ia llegar a ser plausible. En nuestras simulaciones, el 99\% de las iteraciones devolvieron un error muestral menor a 6,14 para $n=2.500$, n\'umero que est\'a m\'as en l\'inea con lo reportado por Poliarqu\'ia. Sin embargo, no queda claro qu\'e representa dicho intervalo en casos como los de CP, cuyos votos la encuesta pone en 1,6\% (?`!`o sea que puede sacar entre \emph{-0,45} y 3,65\%!?) 
 
-Por \'ultimo, est\'a el tema de la comparaci\'on de efectividad con el simulador anterior. A\'un cuando la Direcci\'on Nacional Electoral est\'a usando el mismo m\'etodo que nosotros para estimar el resultado provisorio (contando votos), por lo que su tarea es poco incierta, sus resultados converg\'ian con la realidad \emph{mucho} m\'as lento que los del simulador.
+Por \'ultimo, est\'a el tema de la comparaci\'on de efectividad con el simulador anterior. A\'un cuando la Direcci\'on Nacional Electoral est\'a usando el mismo m\'etodo que nosotros para estimar el resultado provisorio - contar votos \emph{reales} -, por lo que su tarea es poco incierta, sus resultados converg\'ian con al resultado final \emph{mucho} m\'as lento que nuestro simulador.
 
+Es una razonable suposici\'on l\'ogica que predecir el resultado de una elecci\'on a partir de una encuesta es mucho m\'as dif\'icil que contando votos la noche del escrutinio. Si la transitividad se mantiene, deber\'ia ser imposible que a Poliarqu\'ia le vaya relativamente mejor que a la Direcci\'on Nacional Electoral cuando ambas "compiten" con los simuladores programados.
 
-Es una razonable suposici\'on l\'ogica que predecir el resultado de una elecci\'on a partir de una encuesta que contando votos la noche del escrutinio. Si la transitividad se mantiene, luego, deber\'ia ser imposible que a Poliarqu\'ia le vaya relativamente mejor que a la Direcci\'on Nacional Electoral cuando ambas "compiten" con los simuladores programados.
+Sin embargo, por lo que vimos, Poliarqu\'ia tiene tanta fe en sus encuestas telef\'onicas como la que nosotros podemos derivar emp\'iricamente de muestras perfectamente aleatorias. A esta altura, estamos en condiciones de afirmar con cierta vehemencia que el margen de error provisto por Poliarqu\'ia es absolutamente inveros\'imil en un caso (si lo consideramos sobre el total de la predicci\'on), o posible pero demasiado confiado en el otro (cuando se lo aplica a cada candidato).
 
-Sin embargo, por lo que vimos, Poliarqu\'ia tiene tanta fe en sus encuestas telef\'onicas como la que nosotros podemos derivar emp\'iricamente de meustras perfectamente aleatorias. A esta altura, estamos en condiciones de afirmar con cierta vehemencia que el margen de error provisto por Poliarqu\'ia es absolutamente inveros\'imil en un caso (si lo consideramos sobre el total de la preedicci\'on), o posible pero demasiado confiado en el otro (cuando lo contamos por candidato.
-
-\subsection{Sobre la generalizaci\'on de nuestro an\'alisis}
+\subsection{Generalizando nuestro an\'alisis}
 
 Por \'ultimo, aunque sea obvio es necesario aclarar que las condiciones en las cuales estos resultados son replicable para otras elecciones, son particularmente restrictivas. Cada caso requiere su an\'alisis particular, pero con algo de sentido com\'un podemos establecer que :
 \begin{center}
 	\begin{itemize}
-		\item las elecciones con m\'as candidatos ser\'an menos predecibles (tendr\'an mayor error absoluto para id\'enticos tama\~nos muestrales) que las de menos candidatos. En democracias bipartidarias como la Argentina pre-2001 o los Estados Unidos durante toda su historia, los resultados son generalmente m\'as f\'aciles de anticipar que en casos como el nuestro actual, con cinco o seis partidos sacando cantidades no-negligibles de votos;
-		\item las elecciones menos polarizadas ser\'an menos predecibles que las m\'as polarizadas. Una elecci\'on entre 10 candidatos, en los cuales s\'olo 2 o 3 tienen chances de ganar, es m\'as predecible que otra con s\'olo cinco pero probabilidades mas parejas para todos. En el fondo, una mayor polarizaci\'on se puede pensar como equivalente a una reducci\'on en el n\'umero de "candidatos efectivos:.
+		\item las elecciones con m\'as candidatos ser\'an menos predecibles (es decir, tendr\'an mayores intervalos de confianza del error absoluto para id\'enticos tama\~nos muestrales) que las de menos candidatos. En democracias bipartidarias como la Argentina pre-2001 o los Estados Unidos durante toda su historia, los resultados son generalmente m\'as f\'aciles de anticipar que en casos como el nuestro actual, con cinco o seis partidos sacando cantidades no-negligibles de votos;
+		\item las elecciones menos polarizadas ser\'an menos predecibles que las m\'as polarizadas. Una elecci\'on entre 10 candidatos, en los cuales s\'olo 2 o 3 tienen chances de ganar, es m\'as predecible que otra con s\'olo cinco pero con probabilidades m\'as parejas para todos. En el fondo, una mayor polarizaci\'on se puede pensar como equivalente a una reducci\'on en el n\'umero de "candidatos efectivos".
 		\end{itemize}
 	\end{center}
 
-Nuestro caso fue el de un n\'umero grande de candidatos, y una elecci\'on relativamente poco polarizada, con tres partidos sacando m\'as del 20\% de los votos. EN t\'erminos generales entonces, la mayor\'ia de las elecciones deber\'ian ser al menos ligeramente m\'as predecibles que esta, aunque dicha afirmaci\'on bajo ning\'unconcepto permita extrapolar los resultados a otra circunstancias sin uan revisi\'on cr\'itica de los supuestos.
+Nuestro caso fue el de un n\'umero considerable de candidatos (6), y una elecci\'on relativamente poco polarizada, con tres partidos sacando m\'as del 20\% de los votos. EN t\'erminos generales entonces, la mayor\'ia de las elecciones deber\'ian ser al menos ligeramente m\'as predecibles que esta, aunque dicha afirmaci\'on bajo ning\'unconcepto permitE extrapolar los resultados a otra circunstancias sin uan revisi\'on cr\'itica de los supuestos utilizados.
 
 \section{Conclusiones}
 
 Analizando los resultados producidos por el simulador de la noche del escrutinio y compar\'andolos con lo que realmente sucedi\'o el d\'ia de la votac\'ion al cierre de urnas, encontramos que el funcionamiento del simulador y la evoluci\'on de los hechos reales segu\'ian caminos demasiado diferentes como para ser comparados directamente.
-Muy probablemente a causa del supuesto de perfecta aleatoriedad en el orden de carga de los telegramas de votos, sobreestimamos la velocidad a la que los resultados provisorios convergen hacia el resultado final. Mientras que en nuestras simulaciones con poco m\'as del 1\% de los votos ya aparec\'ian tendencias definitivas, en los primeros resultados provisorios anunciados oficialmente, a\'un con casi el 10\% del escrutinio completo los m\'argenes de error eran considerables, por encima de los 5 puntos.
+Muy probablemente a causa del supuesto de perfecta aleatoriedad en el orden de carga de los telegramas de votos, sobreestimamos la velocidad a la que los resultados provisorios convergen hacia el resultado final. Mientras que en nuestras simulaciones poco m\'as del 1\% de las mesas escrutadas alcanzaban para apreciar tendencias definitivas, en los primeros resultados provisorios anunciados oficialmente, a\'un con casi el 10\% del recuento completo los m\'argenes de error eran considerables, por encima de los 5 puntos.
 
 Una futura l\'inea de investigaci\'on entonces, ser\'a incluir en la simulaci\'on una cierta medida de correlaci\'on entre los telegramas cargados sucesivamente, y verificar si el modelo corregido se ajusta mejor a la realidad. Mientras tanto, aunque sus resultados no describan emp\'iricamente la evoluci\'on del recuento provisorio en la realidad, s\'i nos sirvieron para observar g\'raficamente como a medida que aumenta la cantidad de datos procesados, la cantidad de nueva informaci\'on incorporada disminuye exponencialmente.
 
-Este mismo fen\'omeno se observ\'o tambi\'en en el simulador de muestras aleatorias: cada nueva persona incorporada a la muestra mejora la calidad global del estimador, pero un poco menos que la anterior. Para toda consultora profesional (y para los partidos que las contratan), cada individuo encuestado tiene un costo, y si la informaci\'on que se obtiene tiene rendimientos marginales decrecientes, es de esperar que los tama\~nos muestrales elegidos tengan una cota superior dura: es por esto que casi nunca observamos muestras $n=10.000$, por ejemplo.
+Este mismo fen\'omeno se observ\'o en el simulador de muestras aleatorias: cada nueva persona incorporada a la muestra mejora la calidad global del estimador, pero un poco menos que la anterior. Para toda consultora profesional (y para los partidos que las contratan), cada individuo encuestado tiene un costo, y si la informaci\'on que se obtiene tiene rendimientos marginales decrecientes, es de esperar que los tama\~nos muestrales elegidos tengan una cota superior dura: es por esto que casi nunca observamos muestras $n=10.000$, por ejemplo.
 
 Al disminuir \emph{exponencialmente} en vez de linealmente, los beneficios marginales percibidos al incorporar un nuevo individuo a la muestra pueden verse r\'apidamente anulados en la pr\'actica, m\'axime si se considera que existen varias potenciales fuentes de ruido en la informaci\'on, y que el investigador casi nunca tiene una segunda muestra de control con la cual realizar estudios comparados.  
 
-Si estas predicciones son correctas, deber\'iamos observar una marcada sobre-confianza en los pron\'osticos de las encuestas electorales, que se suele manifestar en forma de un intervalo de confianza demasiado peque\~no para el nivel de confianza pretendido. A modo de ejemplo y sin intenciones de generalizar demasiado, se prob\'o esta hip\'otesis con una encuesta publicada tres semanas antes de la elecci\'on por Poliarqu\'ia, que confirm\'o nuestras sospechas.
+Si nuestras observaciones fuesen son correctas, deber\'iamos observar una marcada sobre-confianza en los pron\'osticos electorales a\'un - o especialemnte - entre quienes dependen financieramente de ello. Dicha subestimaci\'on de la incertidumbre inherente a la predicci\'on se suele manifestar en forma de un intervalo demasiado peque\~no para el nivel de confianza pretendido. A modo de ejemplo y sin intenciones de generalizar demasiado, se prob\'o esta hip\'otesis con una encuesta publicada tres semanas antes de la elecci\'on por Poliarqu\'ia, que confirm\'o nuestras sospechas.
 
-Estimamos tambi\'en que al menos en nuestras simulaciones, un 900\% de aumento en el tama\~no muestral reduce en un 70\% el error. Un tradeoff as\'i de negativo entre un costo de la informaci\'on linealmente creciente en $n$ contra un rendimiento marginal exponencialemnte decreciente de la misma, es evidencia suficiente para reconocer que la soluci\'on al problema de la sobreestimaci\'on de la confianza en los resultados no puede pasar por realizar muestras m\'as grandes. La alternativa que resta, ser\'a ser m\'as conservador en el c\'alculo de los intervalos de confianza.
+Estimamos tambi\'en que al menos en nuestras simulaciones, un 900\% de aumento en el tama\~no muestral reduce en un 70\% el error. Un tradeoff as\'i de negativo entre costo de la informaci\'on linealmente creciente en $n$, contra rendimiento marginal exponencialemnte decreciente de la informaci\'on en $n$, es evidencia suficiente para reconocer que la soluci\'on al problema de la sobreestimaci\'on de la confianza en los resultados no puede pasar por realizar muestras m\'as grandes. La alternativa que resta, ser\'a ser m\'as cuidadoso en el c\'alculo de los intervalos de confianza.
 
-En dicho contexto, simuladores como este representana una herramienta m\'as para refinar nuestros an\'alisis. Asumiendo que las muestras que genera tienen un nivel de confianza \'ordenes de magnitud superior al de encuestas reales, podemos utilizar como un \textit{check de realidad}: si los m\'argenes de error que le damos a una muestra tomada en el campo son similares a los que se observan en el ideal plat\'onico de muestral aleatoria del simulador, sin duda estamos siendo demasiado confianzudos.
+En dicho contexto, simuladores como este representana una herramienta m\'as para refinar nuestros an\'alisis. Asumiendo que las muestras que genera tienen un nivel de confianza \'ordenes de magnitud superior al de encuestas reales, podemos utilizarlo como un \textit{check de realidad}: si los m\'argenes de error que le damos a una muestra tomada en el campo son similares a los que se observan en el ideal plat\'onico de muestral aleatoria del simulador, sin duda estamos siendo demasiado confianzudos.
+\section{Referencias}
 
+\begin{itemize}
+	\item El archivo de datos utilizado fue descargado del siguiente link: http://www.datospublicos.gob.ar/
+		data/storage/f/2013-10-29T14\%3A45\%3A50.732Z/electoral-2013-diputados-nacionales.csv
+	\item El archivo con la descripci\'on general del dataset es http://www.datospublicos.gob.ar/
+		data/storage/f/2013-10-29T15\%3A42\%3A53.979Z/electoral-2013-descripcion-general.txt
+	\item Las descripciones del funcionamiento del escrutinio provienen de experiencia personal, y conversaciones con funcionarios de la DINE.
+	\item Las afirmaciones sobre las regiones donde cada partido domin\'o las urnas resultan de consultar el hack realizado por Manuel Aristar\'an, con los resultados por establecimiento geolocalizados. interactivos.lanacion.com.ar/mapa-elecciones-2013
+	\item Las declaraciones de Florencio Randazzo la noche del escrutinio fueron tomadas del archivo de la TV Publica. https://www.youtube.com/watch?v=yW1sXTgKJIg
+\end{itemize}
 
 \section{Anexo I: Gr\'aficos}
 
@@ -446,25 +465,25 @@ En dicho contexto, simuladores como este representana una herramienta m\'as para
 
 \section{Anexo II: C\'odigo Fuente}
 
-No se incluye aqui el codigo para transformar la informaci\'on del formato original a la versi\'on utilizada por los simuladores, con cada mesa, circuito o seccion representada por un unico vector de 6 componentes. Si se desea, dicho codigo (escrito en SQL) se puede revisar en repositorio de GitHub de este trabajo:
-
+No se incluye aqu\'i el c\'odigo para transformar la informaci\'on del formato original a la versi\'on utilizada por los simuladores, con cada mesa, circuito o secci\'on representada por un unico vector de 6 componentes. Si se desea, dicho c\'odigo (escrito en SQL) se puede revisar en el repositorio de GitHub de este trabajo:
+\begin{center}
 https://github.com/gonzalobb/tesis\_mesis 
+\end{center}
 
 Para cada funci\'on, se provee una breve descripci\'on de lo que realiza, y qu\'e elementos devuelve, en el siguiente formato.
+\begin{center}
+mi\_funcion(arg1, arg2) =\textgreater resultado
+\end{center}
+Esto debe interpretarse como "la funcion 'mi\_funcion' toma los argumentos 'arg1' y arg2', y devuelve 'resultado'".
 
-  mi\_funcion(arg1, arg2) => resultado
-
-... quiere decir que la funcion 'mi\_funcion' toma los argumentos 'arg1' y arg2', y devuelve 'resultado'.
-
-Tanto los argumentos como los resutlados de las funciones son de tres grandes tipos:
-
+Tanto los argumentos como los resultados de las funciones son de tres grandes tipos:
 
 \begin{center}
   \begin{itemize}
   \item Numeros enteros, representados con letras minusculas. El tamano muestral a considerar, la cantidad de muestras uqe se desea extraer, el numero de mesas a escrutar.
 \item Vectores (o \textit{arrays}), representados con []. Son casi siempre un dexteto de numeros representando alguna caracteristica relacionada a los partidos participantes: pueden estar expresados en votos absolutos, proporciones entre cero y 1, y porcentajes (entre 0 y 100)
 
-\item "Matrices" (o \textit{arrays bidimensionales}, representadas con [[]]. Tecnicamente son arrays que tienen un array en cada una de sus posiciones. Como un vector es un conjunto de numeros, una matriz es un conjunto de vectores. Una simulacion de la noche dle escutinio, por ejemplo, consistira en uan matriz donde la fila $i$ contiene los resutlados parciales, habiendose escrutado $i$ mesas. Un conjunto de 1000 muestras aleatorias de tamano X, estara representado por 1000 vectores de 6 elementos, o una matriz de $ 1000 \times 6 $.
+\item "Matrices" (o \textit{arrays bidimensionales}, representadas con [[]]. Tecnicamente son arrays que tienen un array en cada una de sus posiciones. Como un vector es un conjunto de numeros, una matriz es un conjunto de vectores. Una simulacion de la noche dle escutinio, por ejemplo, consistira en uan matriz donde la fila $i$ contiene los resultados parciales, habiendose escrutado $i$ mesas. Un conjunto de 1000 muestras aleatorias de tamano X, estara representado por 1000 vectores de 6 elementos, o una matriz de $ 1000 \times 6 $.
 \end{itemize}
 \end{center}
 
@@ -472,13 +491,6 @@ Tanto los argumentos como los resutlados de las funciones son de tres grandes ti
 \lstinputlisting{programa.rb}
 \restoregeometry
 
-\section{Referencias}
-electoral-2013-diputados-nacionales.csv
-txt con la descripcion del dataset
-Manual para autoridades de mesa de la DINE
-experiencia personal y comentarios de funcionarios de la DINE sobre funcionamiento del conteo de votos
-mapa aristaran de resutlados electorales
-video randazzo
-encuesta poliarquia
+
 
 \end{document}
