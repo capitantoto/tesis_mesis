@@ -1,11 +1,12 @@
 # tesis_mesis
 Repositorio personal de mi trabajo de tesis. Está medio sucio pero hey, al menos está.
 
-## Data: CSVs con los resultados por mesa.
-[Portal Nacional de Datos Publicos](http://datospublicos.gob.ar/data/dataset/elecciones-2013)
-	- [Resultados Electorales - Diputados Nacionales](http://www.datospublicos.gob.ar/data/storage/f/2013-10-29T14%3A45%3A50.732Z/electoral-2013-diputados-nacionales.csv)
-	- [Resultados Electorales - Senadores Nacionales](http://www.datospublicos.gob.ar/data/storage/f/2013-10-29T15%3A24%3A30.086Z/electoral-2013-senadores-nacionales.csv)
-	- [Resultados Electorales - Descripción General](http://www.datospublicos.gob.ar/data/storage/f/2013-10-29T15%3A42%3A53.979Z/electoral-2013-descripcion-general.txt)
+## Data
+Fuente:  [Portal Nacional de Datos Publicos](http://datospublicos.gob.ar/data/dataset/elecciones-2013)
+  
+  - [Resultados Electorales - Diputados Nacionales](http://www.datospublicos.gob.ar/data/storage/f/2013-10-29T14%3A45%3A50.732Z/electoral-2013-diputados-nacionales.csv)
+  - [Resultados Electorales - Senadores Nacionales](http://www.datospublicos.gob.ar/data/storage/f/2013-10-29T15%3A24%3A30.086Z/electoral-2013-senadores-nacionales.csv)
+  - [Resultados Electorales - Descripción General](http://www.datospublicos.gob.ar/data/storage/f/2013-10-29T15%3A42%3A53.979Z/electoral-2013-descripcion-general.txt)
 
 
 ## Setup
