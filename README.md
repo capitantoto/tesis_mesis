@@ -26,4 +26,5 @@ mysql -uroot -p tesis -e 'SELECT circuito, sum(ayl), sum(fpv), sum(unen), sum(pr
 mysql -uroot -p tesis -e 'SELECT seccion, sum(ayl), sum(fpv), sum(unen), sum(pro), sum(fit), sum(cp), sum(blancos) FROM mesas_dip GROUP BY seccion' > secciones_raw.tsv
 ```
 ## Otros recursos
- - (Video) Florencio Randazzo anuncia resultado parcial con <10% escrutado. [link](https://www.youtube.com/watch?v=yW1sXTgKJIg)
+ - ([video](https://www.youtube.com/watch?v=yW1sXTgKJIg))
+ Florencio Randazzo anuncia resultado parcial con <10% escrutado. 
