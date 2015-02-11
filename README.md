@@ -16,7 +16,8 @@ mysql -uroot -p tesis < importar_resultados.sql
 mysql -uroot -p tesis < manipular_resultados.sql
 ```
 
-### Exportación del dataset para análisis (nro. de votos agregado por partido y jerarquía geográfica)
+### Exportación del dataset de análisis
+Número de votos agregado por partido y jerarquía geográfica (mesa, circuito, sección)
 ```sh
 mysql -uroot -p tesis -e 'SELECT mesa, sum(ayl), sum(fpv), sum(unen), sum(pro), sum(fit), sum(cp), sum(blancos) FROM mesas_dip GROUP BY mesa' > mesas_raw.tsv
 
